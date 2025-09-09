@@ -12,6 +12,8 @@ public final class APIService: Repository {
     
     private let apiClient = APIClient(baseURL: "https://smart-notification-fastapi-production.up.railway.app")
     
+    public init() { }
+    
     public func postDevice(device_uuid: String, fcm_token: String) async throws {
         let _: EmptyDTO = try await apiClient.request(
             "/devices",
