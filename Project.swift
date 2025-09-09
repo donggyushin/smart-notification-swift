@@ -20,7 +20,11 @@ let project = Project(
                 "smart-notification-swift/Sources",
                 "smart-notification-swift/Resources",
             ],
-            dependencies: []
+            dependencies: [
+                .target(name: "Service"),
+                .external(name: "FirebaseAuth"),
+                .external(name: "FirebaseMessaging")
+            ]
         ),
         .target(
             name: "smart-notification-swiftTests",
@@ -65,10 +69,7 @@ let project = Project(
                 "ThirdPartyLibrary/Sources"
             ],
             dependencies: [
-                .external(name: "FirebaseCore"),
-                .external(name: "FirebaseAuth"),
-                .external(name: "FirebaseFirestore"),
-                .external(name: "FirebaseMessaging")
+                
             ]
         ),
     ]
