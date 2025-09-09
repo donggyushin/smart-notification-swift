@@ -64,7 +64,12 @@ let project = Project(
             buildableFolders: [
                 "ThirdPartyLibrary/Sources"
             ],
-            dependencies: []
+            dependencies: [
+                .external(name: "FirebaseCore"),
+                .external(name: "FirebaseAuth"),
+                .external(name: "FirebaseFirestore"),
+                .external(name: "FirebaseMessaging")
+            ]
         ),
     ]
 )
