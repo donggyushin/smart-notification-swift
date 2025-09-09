@@ -34,12 +34,15 @@ public class APIClient: APIClientProtocol {
     ) async throws -> T {
         let url = baseURL + endpoint
         
+        // Use URLEncoding for GET requests (query parameters), JSONEncoding for others
+        let encoding: ParameterEncoding = method == .get ? URLEncoding.default : JSONEncoding.default
+        
         return try await withCheckedThrowingContinuation { continuation in
             session.request(
                 url,
                 method: method,
                 parameters: parameters,
-                encoding: JSONEncoding.default,
+                encoding: encoding,
                 headers: headers
             )
             .validate()
