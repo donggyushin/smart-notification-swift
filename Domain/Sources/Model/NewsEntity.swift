@@ -34,7 +34,7 @@ public struct NewsEntity {
     public let url: URL?
     /// Date when the news was published
     public let published_date: Date
-    /// Impact score assigned by AI analysis (higher score indicates greater potential market impact)
+    /// Impact score assigned by AI analysis (higher score indicates greater potential market impact) (-10 ~ 10)
     public let score: Int
     /// Stock tickers that may be affected by this news
     public let tickers: [String]
