@@ -24,7 +24,12 @@ let project = Project(
                 .target(name: "Service"),
                 .external(name: "FirebaseAuth"),
                 .external(name: "FirebaseMessaging")
-            ]
+            ],
+            settings: .settings(
+                base: [
+                    "DEVELOPMENT_TEAM": "YV58Q28W8Z"
+                ]
+            )
         ),
         .target(
             name: "smart-notification-swiftTests",
