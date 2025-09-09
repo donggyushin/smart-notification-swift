@@ -75,7 +75,7 @@ let project = Project(
                 "ThirdPartyLibrary/Sources"
             ],
             dependencies: [
-                
+                .external(name: "Alamofire")
             ]
         ),
     ]
