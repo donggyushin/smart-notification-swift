@@ -8,10 +8,17 @@
 import Foundation
 
 public struct NewsResponse {
-    let items: [NewsEntity]
-    let next_cursor_id: Int?
-    let has_more: Bool
-    let limit: Int
+    public let items: [NewsEntity]
+    public let next_cursor_id: Int?
+    public let has_more: Bool
+    public let limit: Int
+    
+    public init(items: [NewsEntity], next_cursor_id: Int?, has_more: Bool, limit: Int) {
+        self.items = items
+        self.next_cursor_id = next_cursor_id
+        self.has_more = has_more
+        self.limit = limit
+    }
 }
 
 public struct NewsEntity {
