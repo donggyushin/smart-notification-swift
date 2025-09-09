@@ -28,10 +28,4 @@ final class Container {
     
     private init() { }
     
-    var repository: Repository {
-        if isPreview {
-            return MockRepository()
-        }
-        return APIService()
-    }
 }
