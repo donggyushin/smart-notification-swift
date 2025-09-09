@@ -33,5 +33,38 @@ let project = Project(
             ],
             dependencies: [.target(name: "smart-notification-swift")]
         ),
+        .target(
+            name: "Service",
+            destinations: .iOS,
+            product: .framework,
+            bundleId: "dev.tuist.Service",
+            infoPlist: .default,
+            buildableFolders: [
+                "Service/Sources"
+            ],
+            dependencies: [.target(name: "Domain")]
+        ),
+        .target(
+            name: "Domain",
+            destinations: .iOS,
+            product: .framework,
+            bundleId: "dev.tuist.Domain",
+            infoPlist: .default,
+            buildableFolders: [
+                "Domain/Sources"
+            ],
+            dependencies: [.target(name: "ThirdPartyLibrary")]
+        ),
+        .target(
+            name: "ThirdPartyLibrary",
+            destinations: .iOS,
+            product: .framework,
+            bundleId: "dev.tuist.ThirdPartyLibrary",
+            infoPlist: .default,
+            buildableFolders: [
+                "ThirdPartyLibrary/Sources"
+            ],
+            dependencies: []
+        ),
     ]
 )
