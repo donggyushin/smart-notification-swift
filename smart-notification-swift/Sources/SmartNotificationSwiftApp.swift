@@ -8,21 +8,44 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseApp.configure()
     
+    // Set messaging delegate first
+    Messaging.messaging().delegate = self
+    
     // Request push notification permission
     UNUserNotificationCenter.current().delegate = self
     let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
     UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { granted, error in
+      print("Permission granted: \(granted)")
+      if let error = error {
+        print("Permission error: \(error)")
+      }
+      
       if granted {
-        print("Push notification permission granted")
-      } else {
-        print("Push notification permission denied")
+        DispatchQueue.main.async {
+          application.registerForRemoteNotifications()
+        }
       }
     }
     
-    application.registerForRemoteNotifications()
-    Messaging.messaging().delegate = self
+    // Try to get existing token
+    Messaging.messaging().token { token, error in
+      if let error = error {
+        print("Error fetching FCM registration token: \(error)")
+      } else if let token = token {
+        print("FCM registration token: \(token)")
+      }
+    }
 
     return true
+  }
+  
+  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    print("APNS token received")
+    Messaging.messaging().apnsToken = deviceToken
+  }
+  
+  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    print("Failed to register for remote notifications: \(error)")
   }
 }
 
