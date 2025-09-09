@@ -20,6 +20,7 @@ let project = Project(
                 "smart-notification-swift/Sources",
                 "smart-notification-swift/Resources",
             ],
+            entitlements: .file(path: "smart-notification-swift/Resources/smart-notification-swift.entitlements"),
             dependencies: [
                 .target(name: "Service"),
                 .external(name: "FirebaseAuth"),
