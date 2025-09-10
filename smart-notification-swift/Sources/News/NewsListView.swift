@@ -112,3 +112,8 @@ struct ScoreView: View {
         }
     }
 }
+
+#Preview {
+    NewsListView(model: .init())
+        .preferredColorScheme(.dark)
+}
