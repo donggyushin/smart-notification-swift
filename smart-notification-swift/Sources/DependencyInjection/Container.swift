@@ -6,15 +6,10 @@
 //
 
 import Foundation
-import Domain
-import Service
 
-final class Container {
-    static let shared = Container()
-    
-    public var isPreview: Bool = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
-    
-    public var isTest: Bool = {
+public final class Container {
+    private var isPreview: Bool = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+    private var isTest: Bool = {
         var testing = false
         if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
             testing = true
@@ -25,15 +20,45 @@ final class Container {
         return testing
     }()
     
+    public static let shared = Container()
+    private var sharedObjectStorage: [String: Any] = [:]
+    
     private init() {}
     
-    private let repositoryImpl: Repository = APIService()
-    private let repositoryMock: Repository = MockRepository()
-    var repository: Repository {
-        if isPreview || isTest {
-            return repositoryMock
+}
+
+private final class WeakWrapper {
+    weak var value: AnyObject?
+    
+    init(value: AnyObject? = nil) {
+        self.value = value
+    }
+}
+
+extension Container {
+    public enum Scope {
+        case unique
+        case shared
+    }
+}
+
+extension Container {
+    public func resolve<T: Any>(scope: Scope, factory: @escaping () -> T, mockFactory: (() -> T)? = nil) -> T {
+        
+        if (isPreview || isTest) && mockFactory != nil {
+            return mockFactory!()
+        }
+        
+        if scope == .unique {
+            return factory()
         } else {
-            return repositoryImpl
+            if let shared = sharedObjectStorage["\(T.self)"] as? T {
+                return shared
+            } else {
+                let newInstance = factory()
+                sharedObjectStorage["\(T.self)"] = newInstance
+                return newInstance
+            }
         }
     }
 }
