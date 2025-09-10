@@ -35,7 +35,7 @@ public struct NewsDTO: Codable {
     
     public func toDomain() -> NewsEntity {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "2025-09-09"
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         let date = dateFormatter.date(from: published_date) ?? Date()
         let newsURL = url.flatMap { URL(string: $0) }
         
