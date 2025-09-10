@@ -13,30 +13,28 @@ struct NewsListView: View {
     @StateObject var model: NewsListViewModel
     
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(model.news, id: \.id) { newsItem in
-                    NewsItemRow(newsItem: newsItem)
-                }
-                
-                if model.loading {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                            .scaleEffect(1.2)
-                        Spacer()
-                    }
-                    .padding()
-                }
+        List {
+            ForEach(model.news, id: \.id) { newsItem in
+                NewsItemRow(newsItem: newsItem)
             }
-            .navigationTitle("Market News")
-            .refreshable {
+            
+            if model.loading {
+                HStack {
+                    Spacer()
+                    ProgressView()
+                        .scaleEffect(1.2)
+                    Spacer()
+                }
+                .padding()
+            }
+        }
+        .navigationTitle("Market News")
+        .refreshable {
+            try? await model.fetchNews()
+        }
+        .task {
+            if model.news.isEmpty {
                 try? await model.fetchNews()
-            }
-            .task {
-                if model.news.isEmpty {
-                    try? await model.fetchNews()
-                }
             }
         }
     }
