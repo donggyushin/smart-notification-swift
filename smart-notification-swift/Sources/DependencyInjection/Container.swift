@@ -27,7 +27,6 @@ final class Container {
     
     private init() {}
     
-    private let repositoryImpl: Repository = APIService()
     var repository: Repository {
         resolve(scope: .shared) {
             APIService()
@@ -35,7 +34,24 @@ final class Container {
             MockRepository()
         }
     }
+}
+
+private final class WeakWrapper {
+    weak var value: AnyObject?
     
+    init(value: AnyObject? = nil) {
+        self.value = value
+    }
+}
+
+extension Container {
+    enum Scope {
+        case unique
+        case shared
+    }
+}
+
+extension Container {
     private func resolve<T: Any>(scope: Scope, factory: @escaping () -> T, mockFactory: (() -> T)? = nil) -> T {
         
         if isPreview || isTest && mockFactory != nil {
@@ -53,20 +69,5 @@ final class Container {
                 return newInstance
             }
         }
-    }
-}
-
-private final class WeakWrapper {
-    weak var value: AnyObject?
-    
-    init(value: AnyObject? = nil) {
-        self.value = value
-    }
-}
-
-extension Container {
-    enum Scope {
-        case unique
-        case shared
     }
 }
