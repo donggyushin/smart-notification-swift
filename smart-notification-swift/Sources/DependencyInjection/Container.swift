@@ -9,7 +9,7 @@ import Foundation
 import Domain
 import Service
 
-final class Container {
+public final class Container {
     private var isPreview: Bool = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
     private var isTest: Bool = {
         var testing = false
@@ -22,18 +22,11 @@ final class Container {
         return testing
     }()
     
-    static let shared = Container()
+    public static let shared = Container()
     private var sharedObjectStorage: [String: Any] = [:]
     
     private init() {}
     
-    var repository: Repository {
-        resolve(scope: .shared) {
-            APIService()
-        } mockFactory: {
-            MockRepository()
-        }
-    }
 }
 
 private final class WeakWrapper {
@@ -45,14 +38,14 @@ private final class WeakWrapper {
 }
 
 extension Container {
-    enum Scope {
+    public enum Scope {
         case unique
         case shared
     }
 }
 
 extension Container {
-    private func resolve<T: Any>(scope: Scope, factory: @escaping () -> T, mockFactory: (() -> T)? = nil) -> T {
+    public func resolve<T: Any>(scope: Scope, factory: @escaping () -> T, mockFactory: (() -> T)? = nil) -> T {
         
         if (isPreview || isTest) && mockFactory != nil {
             return mockFactory!()
