@@ -35,7 +35,8 @@ public struct NewsDTO: Codable {
     
     public func toDomain() -> NewsEntity {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         let date = dateFormatter.date(from: published_date) ?? Date()
         let newsURL = url.flatMap { URL(string: $0) }
         
