@@ -45,12 +45,14 @@ final class Container {
         if scope == .unique {
             return factory()
         } else {
-            if sharedObjectStorage["\(T.self)"] == nil {
-                sharedObjectStorage["\(T.self)"] = factory()
+            if let shared = sharedObjectStorage["\(T.self)"] as? T {
+                return shared
+            } else {
+                let newInstance = factory()
+                sharedObjectStorage["\(T.self)"] = newInstance
+                return newInstance
             }
         }
-        
-        return sharedObjectStorage["\(T.self)"] as! T
     }
 }
 
