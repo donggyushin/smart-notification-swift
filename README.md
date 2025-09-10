@@ -49,20 +49,14 @@ App → Service → Domain → ThirdPartyLibrary
 
 The crown jewel of this architecture is the **elegant dependency injection system**:
 
-**Container** (`smart-notification-swift/Sources/DependencyInjection/Container.swift`):
+**Container** (`smart-notification-swift/Sources/DependencyInjection/Container+dependencies.swift`):
 ```swift
-final class Container {
-    static let shared = Container()
-    
-    // Automatic environment detection
-    public var isPreview: Bool = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
-    public var isTest: Bool = // ... test detection logic
-    
+extension Container {
     var repository: Repository {
-        if isPreview || isTest {
-            return repositoryMock  // Mock data for development
-        } else {
-            return repositoryImpl  // Real API for production
+        resolve(scope: .shared) {
+            APIService()
+        } mockFactory: {
+            MockRepository()
         }
     }
 }
