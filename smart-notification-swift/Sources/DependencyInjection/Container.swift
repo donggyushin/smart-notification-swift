@@ -54,7 +54,7 @@ extension Container {
 extension Container {
     private func resolve<T: Any>(scope: Scope, factory: @escaping () -> T, mockFactory: (() -> T)? = nil) -> T {
         
-        if isPreview || isTest && mockFactory != nil {
+        if (isPreview || isTest) && mockFactory != nil {
             return mockFactory!()
         }
         
