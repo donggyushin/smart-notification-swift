@@ -28,4 +28,13 @@ final class Container {
     
     private init() { }
     
+    private let repositoryImpl: Repository = APIService()
+    private let repositoryMock: Repository = MockRepository()
+    var repository: Repository {
+        if isPreview || isTest {
+            return repositoryMock
+        } else {
+            return repositoryImpl
+        }
+    }
 }
