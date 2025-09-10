@@ -16,6 +16,7 @@ let package = Package(
     name: "smart-notification-swift",
     dependencies: [
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.0.0"),
-        .package(url: "https://github.com/Alamofire/Alamofire", from: "5.9.0")
+        .package(url: "https://github.com/Alamofire/Alamofire", from: "5.9.0"),
+        .package(url: "https://github.com/donggyushin/container", from: "1.0.0")
     ]
 )

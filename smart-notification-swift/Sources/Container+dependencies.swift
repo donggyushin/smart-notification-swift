@@ -7,6 +7,7 @@
 
 import Domain
 import Service
+import Container
 
 extension Container {
     var repository: Repository {

@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Domain
 import Combine
+import Container
 
 final class NewsListViewModel: ObservableObject {
     
