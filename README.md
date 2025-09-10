@@ -49,7 +49,7 @@ App → Service → Domain → ThirdPartyLibrary
 
 The crown jewel of this architecture is the **elegant dependency injection system**:
 
-**Container** (`smart-notification-swift/Sources/DependencyInjection/Container+dependencies.swift`):
+[**Container**](https://github.com/donggyushin/container)
 ```swift
 extension Container {
     var repository: Repository {
@@ -58,22 +58,6 @@ extension Container {
         } mockFactory: {
             MockRepository()
         }
-    }
-}
-```
-
-**@Injected Property Wrapper** (`smart-notification-swift/Sources/DependencyInjection/Injected.swift`):
-```swift
-@propertyWrapper
-struct Injected<T> {
-    private let keyPath: KeyPath<Container, T>
-    
-    var wrappedValue: T {
-        Container.shared[keyPath: keyPath]
-    }
-    
-    init(_ keyPath: KeyPath<Container, T>) {
-        self.keyPath = keyPath
     }
 }
 ```
