@@ -12,7 +12,7 @@ import Combine
 
 final class NewsListViewModel: ObservableObject {
     
-    let repository = Container.shared.repository
+    @Injected(\.repository) var repository
     
     @Published var news: [NewsEntity] = []
     @Published var loading = false
