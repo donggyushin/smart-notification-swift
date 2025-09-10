@@ -16,6 +16,11 @@ struct NewsListView: View {
         List {
             ForEach(model.news, id: \.id) { newsItem in
                 NewsItemRow(newsItem: newsItem)
+                    .onTapGesture {
+                        if let url = newsItem.url {
+                            UIApplication.shared.open(url)
+                        }
+                    }
             }
             
             if model.loading {
