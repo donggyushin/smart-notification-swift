@@ -59,4 +59,9 @@ public final class MockRepository: Repository {
             limit: 10
         )
     }
+    
+    public func getNews(id: Int) async throws -> NewsEntity {
+        let response = try await getNewsFeed(cursor_id: nil)
+        return response.items.randomElement()!
+    }
 }

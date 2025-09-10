@@ -14,6 +14,7 @@ final class NewsDetailViewModel: ObservableObject {
     @Injected(\.repository) private var repository
     
     @Published var news: NewsEntity?
+    @Published var loading = false
     
     let newsId: Int
     init(newsId: Int) {
@@ -22,6 +23,9 @@ final class NewsDetailViewModel: ObservableObject {
     
     @MainActor
     func fetchNewsData() async throws {
-        
+        guard loading == false else { return }
+        loading = true
+        defer { loading = false }
+        news = try await repository.getNews(id: newsId)
     }
 }

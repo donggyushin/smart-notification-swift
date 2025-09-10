@@ -9,6 +9,12 @@ public struct ContentView: View {
     public var body: some View {
         NavigationStack(path: $path) {
             NewsListView(model: .init())
+                .navigationDestination(for: NavigationPath.self) { path in
+                    switch path {
+                    case .news(let id):
+                        NewsDetailView(model: .init(newsId: id))
+                    }
+                }
         }
         .onAppear {
             coordinator = .init(path: $path)

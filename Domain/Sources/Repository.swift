@@ -8,4 +8,5 @@
 public protocol Repository {
     func postDevice(device_uuid: String, fcm_token: String) async throws
     func getNewsFeed(cursor_id: Int?) async throws -> NewsResponse
+    func getNews(id: Int) async throws -> NewsEntity
 }

@@ -17,9 +17,7 @@ struct NewsListView: View {
             ForEach(model.news, id: \.id) { newsItem in
                 NewsItemRow(newsItem: newsItem)
                     .onTapGesture {
-                        if let url = newsItem.url {
-                            UIApplication.shared.open(url)
-                        }
+                        coordinator?.push(.news(newsItem.id))
                     }
             }
             

@@ -15,4 +15,18 @@ final class Coordinator {
     init(path: Binding<[NavigationPath]>) {
         self._path = path
     }
+    
+    func push(_ path: NavigationPath) {
+        self.path.append(path)
+    }
+    
+    func pop() {
+        guard path.isEmpty == false else { return }
+        path.removeLast()
+    }
+    
+    func popToRoot() {
+        guard path.isEmpty == false else { return }
+        path.removeAll()
+    }
 }

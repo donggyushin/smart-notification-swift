@@ -38,4 +38,10 @@ public final class APIService: Repository {
         )
         return response.toDomain()
     }
+    
+    public func getNews(id: Int) async throws -> NewsEntity {
+        let url = "/news/\(id)"
+        let response: NewsDTO = try await apiClient.request(url)
+        return response.toDomain()
+    }
 }

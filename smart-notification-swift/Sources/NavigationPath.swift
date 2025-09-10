@@ -7,4 +7,6 @@
 
 import Foundation
 
-enum NavigationPath: Hashable { }
+enum NavigationPath: Hashable {
+    case news(Int)
+}
