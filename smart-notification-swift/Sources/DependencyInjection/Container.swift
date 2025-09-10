@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import Domain
-import Service
 
 public final class Container {
     private var isPreview: Bool = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
