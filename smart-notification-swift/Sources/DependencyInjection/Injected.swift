@@ -8,14 +8,14 @@
 import Foundation
 
 @propertyWrapper
-struct Injected<T> {
+public struct Injected<T> {
     private let keyPath: KeyPath<Container, T>
     
-    var wrappedValue: T {
+    public var wrappedValue: T {
         Container.shared[keyPath: keyPath]
     }
     
-    init(_ keyPath: KeyPath<Container, T>) {
+    public init(_ keyPath: KeyPath<Container, T>) {
         self.keyPath = keyPath
     }
 }
