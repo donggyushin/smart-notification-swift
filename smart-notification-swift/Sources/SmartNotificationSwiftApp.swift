@@ -75,6 +75,9 @@ struct SmartNotificationSwiftApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL { url in
+                    openDeepLink(url: url)
+                }
         }
     }
 }

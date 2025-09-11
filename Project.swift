@@ -14,6 +14,12 @@ let project = Project(
                         "UIColorName": "",
                         "UIImageName": "",
                     ],
+                    "CFBundleURLTypes": [
+                        [
+                            "CFBundleURLName": "dev.tuist.smart-notification-swift",
+                            "CFBundleURLSchemes": ["smartnotification"]
+                        ]
+                    ]
                 ]
             ),
             buildableFolders: [
