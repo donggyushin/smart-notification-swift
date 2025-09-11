@@ -18,14 +18,11 @@ func openDeepLink(url: URL) {
     
     switch host {
     case "news":
-        print(pathComponents)
-        
         if pathComponents.count == 1 {
             if let newsId = Int(pathComponents[0]) {
                 coordinator?.push(.news(newsId))
             }
         }
-        
         
     default: break
     }
