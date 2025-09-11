@@ -31,6 +31,7 @@ struct NewsListView: View {
                 .padding()
             }
         }
+        .scrollIndicators(.never)
         .navigationTitle("Market News")
         .refreshable {
             try? await model.fetchNews()
