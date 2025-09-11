@@ -62,7 +62,7 @@ extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         guard let fcmToken else { return }
         Task {
-            try await Container.shared.repository.postDevice(device_uuid: "donggyuuuuu", fcm_token: fcmToken)
+            try await Container.shared.repository.postDevice(device_uuid: UIDevice.current.identifierForVendor?.uuidString ?? "", fcm_token: fcmToken)
         }
     }
 }
