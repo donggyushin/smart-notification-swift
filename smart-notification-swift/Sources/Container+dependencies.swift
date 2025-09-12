@@ -10,10 +10,12 @@ import Service
 import Container
 
 extension Container {
-    var repository: Repository {
-        resolve(scope: .shared) {
+    var repository: Factory<Repository> {
+        self {
             APIService()
-        } mockFactory: {
+        }
+        .shared
+        .onPreview {
             MockRepository()
         }
     }
