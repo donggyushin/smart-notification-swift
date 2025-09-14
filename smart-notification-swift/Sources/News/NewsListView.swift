@@ -19,6 +19,13 @@ struct NewsListView: View {
                     .onTapGesture {
                         coordinator?.push(.news(newsItem.id))
                     }
+                    .onAppear {
+                        if newsItem.id == model.news.last?.id {
+                            Task {
+                                try? await model.fetchNews()
+                            }
+                        }
+                    }
             }
             
             if model.loading {
@@ -34,7 +41,7 @@ struct NewsListView: View {
         .scrollIndicators(.never)
         .navigationTitle("Market News")
         .refreshable {
-            try? await model.fetchNews()
+            try? await model.reload()
         }
         .task {
             if model.news.isEmpty {

@@ -21,11 +21,23 @@ final class NewsListViewModel: ObservableObject {
     private var has_more = true
     
     @MainActor
-    func fetchNews() async throws {
+    func reload() async throws {
         guard loading == false else { return }
         loading = true
         defer { loading = false }
         let response = try await repository.getNewsFeed(cursor_id: nil)
+        news = response.items
+        next_cursor_id = response.next_cursor_id
+        has_more = response.has_more
+    }
+    
+    @MainActor
+    func fetchNews() async throws {
+        guard has_more else { return }
+        guard loading == false else { return }
+        loading = true
+        defer { loading = false }
+        let response = try await repository.getNewsFeed(cursor_id: next_cursor_id)
         news.append(contentsOf: response.items)
         next_cursor_id = response.next_cursor_id
         has_more = response.has_more
