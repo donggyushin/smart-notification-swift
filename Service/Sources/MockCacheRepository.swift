@@ -51,4 +51,9 @@ public final class MockCacheRepository: CacheRepository {
         }
         print("Mock: Cached \(news.count) news items")
     }
+
+    public func clearAllNewsData() {
+        cachedNews.removeAll()
+        print("Mock: Cleared all news data")
+    }
 }

@@ -10,4 +10,5 @@ import Foundation
 public protocol CacheRepository {
     func getNews() -> [NewsEntity]
     func saveNews(_ news: [NewsEntity])
+    func clearAllNewsData()
 }

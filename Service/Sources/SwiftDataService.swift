@@ -60,4 +60,18 @@ public final class SwiftDataService: CacheRepository {
             print("Failed to save cached news: \(error)")
         }
     }
+
+    public func clearAllNewsData() {
+        let descriptor = FetchDescriptor<NewsLocalDTO>()
+
+        do {
+            let allItems = try modelContext.fetch(descriptor)
+            for item in allItems {
+                modelContext.delete(item)
+            }
+            try modelContext.save()
+        } catch {
+            print("Failed to clear all news data: \(error)")
+        }
+    }
 }

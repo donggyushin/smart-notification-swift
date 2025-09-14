@@ -50,6 +50,7 @@ final class NewsListViewModel: ObservableObject {
     }
     
     func saveCache() {
+        cache.clearAllNewsData()
         cache.saveNews(self.news)
     }
 }
