@@ -1,5 +1,5 @@
 //
-//  NewsEntityDTO.swift
+//  NewsLocalDTO.swift
 //  Service
 //
 //  Created by Claude on 9/14/25.
@@ -10,7 +10,7 @@ import SwiftData
 import Domain
 
 @Model
-final class NewsEntityDTO {
+final class NewsLocalDTO {
     @Attribute(.unique) var id: Int
     var title: String
     var summarize: String
