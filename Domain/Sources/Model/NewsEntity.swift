@@ -38,8 +38,9 @@ public struct NewsEntity {
     public let score: Int
     /// Stock tickers that may be affected by this news
     public let tickers: [String]
+    public let created_at: Date
     
-    public init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String]) {
+    public init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String], created_at: Date) {
         self.id = id
         self.title = title
         self.summarize = summarize
@@ -47,5 +48,6 @@ public struct NewsEntity {
         self.published_date = published_date
         self.score = score
         self.tickers = tickers
+        self.created_at = created_at
     }
 }

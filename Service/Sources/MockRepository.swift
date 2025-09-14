@@ -30,7 +30,8 @@ public final class MockRepository: Repository {
                 url: URL(string: "https://example.com/fed-rate-news"),
                 published_date: Date().addingTimeInterval(-3600), // 1 hour ago
                 score: 8,
-                tickers: ["AAPL", "MSFT", "JPM", "BAC"]
+                tickers: ["AAPL", "MSFT", "JPM", "BAC"],
+                created_at: Date().addingTimeInterval(-3600)
             ),
             NewsEntity(
                 id: 2,
@@ -39,7 +40,8 @@ public final class MockRepository: Repository {
                 url: URL(string: "https://example.com/tech-earnings"),
                 published_date: Date().addingTimeInterval(-7200), // 2 hours ago
                 score: 6,
-                tickers: ["GOOGL", "AMZN", "META", "NFLX"]
+                tickers: ["GOOGL", "AMZN", "META", "NFLX"],
+                created_at: Date().addingTimeInterval(-7200)
             ),
             NewsEntity(
                 id: 3,
@@ -48,7 +50,8 @@ public final class MockRepository: Repository {
                 url: URL(string: "https://example.com/oil-prices"),
                 published_date: Date().addingTimeInterval(-10800), // 3 hours ago
                 score: -4,
-                tickers: ["XOM", "CVX", "BP", "SLB"]
+                tickers: ["XOM", "CVX", "BP", "SLB"],
+                created_at: Date().addingTimeInterval(-10800)
             )
         ]
         

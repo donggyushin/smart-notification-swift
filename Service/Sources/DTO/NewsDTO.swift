@@ -32,6 +32,7 @@ public struct NewsDTO: Codable {
     let published_date: String
     let score: Int
     let tickers: [String]
+    let created_at: String
     
     public func toDomain() -> NewsEntity {
         let dateFormatter = DateFormatter()
@@ -39,6 +40,7 @@ public struct NewsDTO: Codable {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         let date = dateFormatter.date(from: published_date) ?? Date()
         let newsURL = url.flatMap { URL(string: $0) }
+        let created_at = dateFormatter.date(from: created_at) ?? Date()
         
         return NewsEntity(
             id: id,
@@ -47,7 +49,8 @@ public struct NewsDTO: Codable {
             url: newsURL,
             published_date: date,
             score: score,
-            tickers: tickers
+            tickers: tickers,
+            created_at: created_at
         )
     }
 }
