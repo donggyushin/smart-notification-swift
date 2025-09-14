@@ -37,6 +37,7 @@ final class NewsListViewModel: ObservableObject {
         has_more = response.has_more
     }
     
+    private var isFirstFetching = true
     @MainActor
     func fetchNews() async throws {
         guard has_more else { return }
@@ -44,9 +45,14 @@ final class NewsListViewModel: ObservableObject {
         loading = true
         defer { loading = false }
         let response = try await repository.getNewsFeed(cursor_id: next_cursor_id)
-        news.append(contentsOf: response.items)
+        if isFirstFetching {
+            news = response.items
+        } else {
+            news.append(contentsOf: response.items)
+        }
         next_cursor_id = response.next_cursor_id
         has_more = response.has_more
+        isFirstFetching = false
     }
     
     func saveCache() {
