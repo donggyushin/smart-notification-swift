@@ -35,22 +35,38 @@ public struct NewsDTO: Codable {
     let created_at: String
     
     public func toDomain() -> NewsEntity {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        let date = dateFormatter.date(from: published_date) ?? Date()
         let newsURL = url.flatMap { URL(string: $0) }
-        let created_at = dateFormatter.date(from: created_at) ?? Date()
-        
+        let publishedDate = parseDate(from: published_date)
+        let createdAtDate = parseDate(from: created_at)
+
         return NewsEntity(
             id: id,
             title: title,
             summarize: summarize,
             url: newsURL,
-            published_date: date,
+            published_date: publishedDate,
             score: score,
             tickers: tickers,
-            created_at: created_at
+            created_at: createdAtDate
         )
+    }
+
+    private func parseDate(from dateString: String) -> Date {
+        // Try ISO8601 with fractional seconds and timezone
+        let iso8601Formatter = ISO8601DateFormatter()
+        iso8601Formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        if let date = iso8601Formatter.date(from: dateString) {
+            return date
+        }
+
+        // Fallback to basic ISO8601 format
+        iso8601Formatter.formatOptions = [.withInternetDateTime]
+        if let date = iso8601Formatter.date(from: dateString) {
+            return date
+        }
+
+        // Last resort fallback
+        return Date()
     }
 }
