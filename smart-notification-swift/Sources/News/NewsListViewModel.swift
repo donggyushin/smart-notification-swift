@@ -14,11 +14,17 @@ import Container
 final class NewsListViewModel: ObservableObject {
     
     @Injected(\.repository) var repository
+    @Injected(\.cache) var cache
     
     @Published var news: [NewsEntity] = []
     @Published var loading = false
     private var next_cursor_id: Int?
     private var has_more = true
+    
+    @MainActor
+    func prepareInitialData() {
+        self.news = cache.getNews()
+    }
     
     @MainActor
     func reload() async throws {
@@ -38,6 +44,11 @@ final class NewsListViewModel: ObservableObject {
         loading = true
         defer { loading = false }
         let response = try await repository.getNewsFeed(cursor_id: next_cursor_id)
+        
+        if self.news.isEmpty {
+            cache.saveNews(response.items)
+        }
+        
         news.append(contentsOf: response.items)
         next_cursor_id = response.next_cursor_id
         has_more = response.has_more

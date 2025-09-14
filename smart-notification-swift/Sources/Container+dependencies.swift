@@ -14,9 +14,19 @@ extension Container {
         self {
             APIService()
         }
-        .shared
         .onPreview {
             MockRepository()
         }
+        .shared
+    }
+    
+    var cache: Factory<CacheRepository> {
+        self {
+            SwiftDataService()
+        }
+        .onPreview {
+            MockCacheRepository()
+        }
+        .shared
     }
 }
