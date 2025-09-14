@@ -42,6 +42,7 @@ struct NewsListView: View {
         .navigationTitle("Market News")
         .refreshable {
             try? await model.reload()
+            model.saveCache()
         }
         .task {
             if model.news.isEmpty {

@@ -37,10 +37,12 @@ App → Service → Domain → ThirdPartyLibrary
 **Domain**: Core business logic and entities
 - `NewsEntity`, `NewsResponse` models
 - `Repository` protocol defining data access interface
+- `CacheRepository` protocol defining local storage interface
 
 **Service**: API implementation and data layer
 - `APIService` for production API calls
 - `MockRepository` for development/testing
+- `SwiftDataService` for local caching with SwiftData
 - DTOs and networking logic
 
 **App**: UI, ViewModels, and dependency injection
@@ -59,10 +61,20 @@ extension Container {
         self {
             APIService()
         }
-        .shared
         .onPreview {
             MockRepository()
         }
+        .shared
+    }
+
+    var cache: Factory<CacheRepository> {
+        self {
+            SwiftDataService()
+        }
+        .onPreview {
+            MockCacheRepository()
+        }
+        .shared
     }
 }
 ```
@@ -70,10 +82,16 @@ extension Container {
 **Usage** - Clean, declarative, and type-safe:
 ```swift
 final class NewsListViewModel: ObservableObject {
-    @Injected(\.repository) var repository  // ✨ That's it!
-    
+    @Injected(\.repository) var repository  // ✨ API access
+    @Injected(\.cache) var cache           // ✨ Local caching
+
+    func prepareInitialData() {
+        self.news = cache.getNews()  // Instant load from cache
+    }
+
     func fetchNews() async throws {
         let response = try await repository.getNewsFeed(cursor_id: nil)
+        cache.saveNews(response.items)  // Cache for offline access
         // ...
     }
 }
@@ -91,6 +109,7 @@ final class NewsListViewModel: ObservableObject {
 
 - **Smart News Feed**: AI-analyzed market news with impact scores (-10 to +10)
 - **Stock Tickers**: Relevant stocks affected by each news item
+- **Local Caching**: SwiftData-powered offline access and instant loading
 - **Push Notifications**: Instant alerts for high-impact market events
 - **Clean UI**: Simple, focused interface built with SwiftUI
 - **Pull-to-Refresh**: Easy data updates with native iOS patterns
@@ -101,6 +120,7 @@ final class NewsListViewModel: ObservableObject {
 - **Architecture**: MVVM with Repository pattern
 - **DI**: Custom property wrapper system
 - **Networking**: Alamofire
+- **Local Storage**: SwiftData for caching
 - **Push Notifications**: Firebase Messaging
 - **Build System**: Tuist for project generation
 

@@ -30,8 +30,8 @@ xcodebuild test -workspace smart-notification-swift.xcworkspace -scheme smart-no
 The project follows a clean, modular architecture with clear separation of concerns:
 
 - **App Module** (`smart-notification-swift`): Main iOS app target containing UI, ViewModels, and dependency injection
-- **Domain**: Core business logic with entities (`NewsEntity`, `NewsResponse`) and repository protocol
-- **Service**: API implementation, DTOs, and mock data for testing/previews
+- **Domain**: Core business logic with entities (`NewsEntity`, `NewsResponse`) and repository protocols (`Repository`, `CacheRepository`)
+- **Service**: API implementation, SwiftData caching, DTOs, and mock data for testing/previews
 - **ThirdPartyLibrary**: External dependencies wrapper (Alamofire)
 
 ### Dependency Flow
@@ -41,16 +41,18 @@ App → Service → Domain → ThirdPartyLibrary
 
 ### Key Architectural Patterns
 
-**Repository Pattern**: 
-- `Repository` protocol in Domain defines data access interface
+**Repository Pattern**:
+- `Repository` protocol in Domain defines API data access interface
+- `CacheRepository` protocol in Domain defines local storage interface
 - `APIService` in Service implements real API calls
-- `MockRepository` in Service provides test/preview data
+- `SwiftDataService` in Service implements local caching with SwiftData
+- `MockRepository` and `MockCacheRepository` in Service provide test/preview data
 - Automatic selection via `Container` based on environment (preview/test vs production)
 
 **Dependency Injection**:
 - Custom `@Injected` property wrapper for clean dependency injection
 - `Container` singleton manages dependency resolution and environment detection
-- Usage: `@Injected(\.repository) var repository`
+- Usage: `@Injected(\.repository) var repository` and `@Injected(\.cache) var cache`
 
 **MVVM Pattern**:
 - SwiftUI Views bind to ObservableObject ViewModels
@@ -67,14 +69,19 @@ smart-notification-swift/Sources/
 └── App files (ContentView, App)
 
 Domain/Sources/
-├── Repository.swift               # Data access protocol
+├── Repository.swift               # API data access protocol
+├── CacheRepository.swift          # Local storage protocol
 └── Model/NewsEntity.swift         # Core domain entities
 
 Service/Sources/
 ├── APIService.swift              # Production API implementation
-├── MockRepository.swift          # Test/preview mock data
+├── SwiftDataService.swift        # SwiftData local caching implementation
+├── MockRepository.swift          # Test/preview API mock data
+├── MockCacheRepository.swift     # Test/preview cache mock data
 ├── APIClient.swift               # HTTP client wrapper
-└── DTO/                          # Data transfer objects
+└── DTO/
+    ├── NewsDTO.swift             # API data transfer objects
+    └── NewsLocalDTO.swift        # SwiftData persistence model
 ```
 
 ### Dependencies
@@ -82,22 +89,29 @@ Service/Sources/
 **External Libraries** (managed via Tuist/Package.swift):
 - Firebase (Auth, Messaging) - Push notifications and authentication
 - Alamofire - HTTP networking
+- SwiftData - Local data persistence and caching
 
 **Environment Detection**:
 The Container automatically detects runtime environment:
-- **Preview mode**: Uses MockRepository for SwiftUI previews
-- **Test mode**: Uses MockRepository for unit tests  
-- **Production**: Uses APIService for real API calls
+- **Preview mode**: Uses MockRepository and MockCacheRepository for SwiftUI previews
+- **Test mode**: Uses MockRepository and MockCacheRepository for unit tests
+- **Production**: Uses APIService and SwiftDataService for real API calls and local caching
 
 ## Key Features
 
 **News Feed**: Displays AI-analyzed news articles with:
 - Impact scores (-10 to +10) with color coding
 - Relevant stock tickers as badges
+- **Local caching with SwiftData** for offline access and instant loading
 - Pull-to-refresh and infinite scroll capability
 - Tap-to-open functionality for news URLs
 
 **Smart Notifications**: Firebase integration for push notifications about high-impact market news.
+
+**Caching Strategy**:
+- `prepareInitialData()` loads cached news instantly (no loading spinner)
+- Fresh data is fetched from API and cached for future use
+- Clean separation between API data (`NewsEntity`) and persistence layer (`NewsLocalDTO`)
 
 ## Development Notes
 
