@@ -47,6 +47,7 @@ struct NewsListView: View {
             if model.news.isEmpty {
                 model.prepareInitialData()
                 try? await model.fetchNews()
+                model.saveCache()
             }
         }
     }

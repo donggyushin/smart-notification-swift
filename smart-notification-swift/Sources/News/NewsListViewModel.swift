@@ -44,13 +44,12 @@ final class NewsListViewModel: ObservableObject {
         loading = true
         defer { loading = false }
         let response = try await repository.getNewsFeed(cursor_id: next_cursor_id)
-        
-        if self.news.isEmpty {
-            cache.saveNews(response.items)
-        }
-        
         news.append(contentsOf: response.items)
         next_cursor_id = response.next_cursor_id
         has_more = response.has_more
+    }
+    
+    func saveCache() {
+        cache.saveNews(self.news)
     }
 }
