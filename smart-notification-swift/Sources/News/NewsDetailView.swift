@@ -33,7 +33,7 @@ struct NewsDetailView: View {
                             HStack {
                                 ScoreView(score: news.score)
                                 Spacer()
-                                Text(news.published_date, style: .relative)
+                                Text(news.published_date, format: .dateTime.year().month().day().hour().minute())
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -119,4 +119,8 @@ struct NewsDetailView: View {
             try? await model.fetchNewsData()
         }
     }
+}
+
+#Preview {
+    NewsDetailView(model: .init(newsId: 1))
 }
