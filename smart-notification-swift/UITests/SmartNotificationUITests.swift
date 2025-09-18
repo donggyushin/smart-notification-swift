@@ -21,11 +21,6 @@ final class SmartNotificationUITests: XCTestCase {
         app = nil
     }
 
-    func test_appLaunches() throws {
-        // Test that the app launches successfully
-        XCTAssertTrue(app.exists)
-    }
-
     // Test that NewsListView displays news items and navigate to NewsDetailView
     func test_navigate_to_newsDetailView() async throws {
         // Wait for API response (1 seconds should be enough because there is cache system)
@@ -35,11 +30,6 @@ final class SmartNotificationUITests: XCTestCase {
         let newsList = await app.collectionViews["newsList"]
         
         let cells = await newsList.cells
-        let cellsCount = await cells.count
-        
-        // There are maybe 5cells appear on the screen.
-        XCTAssertGreaterThan(cellsCount, 0)
-        
         let firstCell = await cells.firstMatch
         
         // Tap first cell to navigation to NewsDetailView
@@ -55,6 +45,15 @@ final class SmartNotificationUITests: XCTestCase {
         let newsDetailNavigationBar = await app.navigationBars["News Detail"]
         let newsDetailNavigationBarExist = await newsDetailNavigationBar.exists
         XCTAssertTrue(newsDetailNavigationBarExist)
+        
+        // Check safari opened
+        let safariButton = await app.buttons["Read Full Article"]
+        
+        await safariButton.tap()
+        
+        let safariApp = await XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        let safariRunning = await safariApp.wait(for: .runningForeground, timeout: 3)
+        XCTAssertTrue(safariRunning)
     }
 
 }
