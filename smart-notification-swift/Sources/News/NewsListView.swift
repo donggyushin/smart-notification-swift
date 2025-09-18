@@ -38,6 +38,7 @@ struct NewsListView: View {
                 .padding()
             }
         }
+        .accessibilityIdentifier("newsList")
         .scrollIndicators(.never)
         .navigationTitle("Market News")
         .refreshable {
