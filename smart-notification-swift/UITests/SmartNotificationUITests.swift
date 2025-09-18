@@ -21,8 +21,8 @@ final class SmartNotificationUITests: XCTestCase {
         app = nil
     }
 
-    // Test that NewsListView displays news items and navigate to NewsDetailView
-    func test_navigate_to_newsDetailView() async throws {
+    // Test that NewsListView displays news items and navigate to NewsDetailView and open safari for stock item
+    func test_open_stock_full_article() async throws {
         // Wait for API response (1 seconds should be enough because there is cache system)
         try await Task.sleep(for: .seconds(1))
 
