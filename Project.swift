@@ -58,7 +58,12 @@ let project = Project(
             buildableFolders: [
                 "smart-notification-swift/UITests"
             ],
-            dependencies: [.target(name: "smart-notification-swift")]
+            dependencies: [.target(name: "smart-notification-swift")],
+            settings: .settings(
+                base: [
+                    "DEVELOPMENT_TEAM": "YV58Q28W8Z"
+                ]
+            )
         ),
         .target(
             name: "Service",
