@@ -50,6 +50,17 @@ let project = Project(
             dependencies: [.target(name: "smart-notification-swift")]
         ),
         .target(
+            name: "smart-notification-swiftUITests",
+            destinations: .iOS,
+            product: .uiTests,
+            bundleId: "dev.tuist.smart-notification-swiftUITests",
+            infoPlist: .default,
+            buildableFolders: [
+                "smart-notification-swift/UITests"
+            ],
+            dependencies: [.target(name: "smart-notification-swift")]
+        ),
+        .target(
             name: "Service",
             destinations: .iOS,
             product: .framework,
