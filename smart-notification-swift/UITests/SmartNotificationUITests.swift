@@ -27,7 +27,7 @@ final class SmartNotificationUITests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
 
         // SwiftUI List appears as a CollectionView in this case
-        let newsList = await app.collectionViews["newsList"]
+        let newsList = await app.collectionViews.firstMatch
         
         let cells = await newsList.cells
         let firstCell = await cells.firstMatch
