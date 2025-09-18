@@ -7,6 +7,12 @@
 
 import Foundation
 import Alamofire
+import Domain
+
+private struct ErrorResponse: Codable {
+    let error: String?
+    let message: String?
+}
 
 public protocol APIClientProtocol {
     func request<T: Codable>(
@@ -33,10 +39,10 @@ public class APIClient: APIClientProtocol {
         headers: HTTPHeaders? = nil
     ) async throws -> T {
         let url = baseURL + endpoint
-        
+
         // Use URLEncoding for GET requests (query parameters), JSONEncoding for others
         let encoding: ParameterEncoding = method == .get ? URLEncoding.default : JSONEncoding.default
-        
+
         return try await withCheckedThrowingContinuation { continuation in
             session.request(
                 url,
@@ -46,10 +52,28 @@ public class APIClient: APIClientProtocol {
                 headers: headers
             )
             .validate()
-            .responseDecodable(of: T.self) { response in
+            .responseData { response in
                 switch response.result {
-                case .success(let value):
-                    continuation.resume(returning: value)
+                case .success(let data):
+                    do {
+                        // First check for error response structure
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                            if let error = errorResponse.error {
+                                continuation.resume(throwing: AppError.custom(error))
+                                return
+                            }
+                            if let message = errorResponse.message {
+                                continuation.resume(throwing: AppError.custom(message))
+                                return
+                            }
+                        }
+
+                        // If no error, decode as expected type
+                        let decodedValue = try JSONDecoder().decode(T.self, from: data)
+                        continuation.resume(returning: decodedValue)
+                    } catch {
+                        continuation.resume(throwing: AppError.decode)
+                    }
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }
