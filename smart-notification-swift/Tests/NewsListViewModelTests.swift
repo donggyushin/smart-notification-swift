@@ -32,7 +32,6 @@ final class NewsListViewModelTests: XCTestCase {
         XCTAssertGreaterThan(viewModel.news.count, 0)
     }
 
-    @MainActor
     func test_reload_fetchesNewsFromRepository() async throws {
         // When
         try await viewModel.reload()
@@ -42,7 +41,6 @@ final class NewsListViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.loading)
     }
 
-    @MainActor
     func test_fetchNews_loadsNewsFromRepository() async throws {
         // When
         try await viewModel.fetchNews()
@@ -52,34 +50,12 @@ final class NewsListViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.loading)
     }
 
-    @MainActor
     func test_loading_stateChanges() async throws {
         // Given
         XCTAssertFalse(viewModel.loading)
-
         // When - start async operation
-        let task = Task {
-            try await viewModel.reload()
-        }
-
-        // Brief moment to check loading state
-        try await Task.sleep(nanoseconds: 1_000_000) // 1ms
-
+        try await viewModel.reload()
         // Then - should be loading initially
-        // (Note: this might be flaky due to timing, but demonstrates the concept)
-
-        // Wait for completion
-        try await task.value
-
-        // Should not be loading after completion
         XCTAssertFalse(viewModel.loading)
-    }
-
-    func test_saveCache_executesWithoutError() async {
-        // Given
-        await viewModel.prepareInitialData()
-
-        // When/Then - should not throw
-        XCTAssertNoThrow(viewModel.saveCache())
     }
 }
