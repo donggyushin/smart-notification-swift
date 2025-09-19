@@ -55,26 +55,6 @@ final class DTOTests: XCTestCase {
         XCTAssertEqual(newsEntity.tickers, ["SPY"])
     }
 
-    func test_NewsDTO_toDomain_withInvalidURL() {
-        let newsDTO = NewsDTO(
-            id: 3,
-            title: "Invalid URL Test",
-            summarize: "Testing invalid URL handling",
-            url: nil,
-            published_date: "2025-09-19T10:30:00Z",
-            score: 0,
-            tickers: [],
-            created_at: "2025-09-19T10:30:00Z"
-        )
-
-        let newsEntity = newsDTO.toDomain()
-
-        XCTAssertEqual(newsEntity.id, 3)
-        XCTAssertNil(newsEntity.url)
-        XCTAssertEqual(newsEntity.score, 0)
-        XCTAssertEqual(newsEntity.tickers, [])
-    }
-
     func test_NewsResponseDTO_toDomain() {
         let newsDTO1 = NewsDTO(
             id: 1,
@@ -129,5 +109,130 @@ final class DTOTests: XCTestCase {
         XCTAssertNil(response.next_cursor_id)
         XCTAssertEqual(response.has_more, false)
         XCTAssertEqual(response.limit, 10)
+    }
+
+    func test_NewsLocalDTO_initFromEntity() {
+        let testURL = URL(string: "https://example.com/news")!
+        let publishedDate = Date()
+        let createdDate = Date().addingTimeInterval(-3600)
+
+        let newsEntity = NewsEntity(
+            id: 123,
+            title: "Tesla Stock Surge",
+            summarize: "Tesla shares rise on strong delivery numbers",
+            url: testURL,
+            published_date: publishedDate,
+            score: 7,
+            tickers: ["TSLA", "NIO"],
+            created_at: createdDate
+        )
+
+        let localDTO = NewsLocalDTO(from: newsEntity)
+
+        XCTAssertEqual(localDTO.id, 123)
+        XCTAssertEqual(localDTO.title, "Tesla Stock Surge")
+        XCTAssertEqual(localDTO.summarize, "Tesla shares rise on strong delivery numbers")
+        XCTAssertEqual(localDTO.url, testURL)
+        XCTAssertEqual(localDTO.published_date, publishedDate)
+        XCTAssertEqual(localDTO.score, 7)
+        XCTAssertEqual(localDTO.tickers, ["TSLA", "NIO"])
+        XCTAssertEqual(localDTO.created_at, createdDate)
+        XCTAssertTrue(localDTO.cached_at.timeIntervalSinceNow < 1)
+    }
+
+    func test_NewsLocalDTO_initFromEntity_withNilURL() {
+        let publishedDate = Date()
+        let createdDate = Date().addingTimeInterval(-3600)
+
+        let newsEntity = NewsEntity(
+            id: 456,
+            title: "Market Update",
+            summarize: "General market analysis",
+            url: nil,
+            published_date: publishedDate,
+            score: -2,
+            tickers: ["SPY"],
+            created_at: createdDate
+        )
+
+        let localDTO = NewsLocalDTO(from: newsEntity)
+
+        XCTAssertEqual(localDTO.id, 456)
+        XCTAssertEqual(localDTO.title, "Market Update")
+        XCTAssertNil(localDTO.url)
+        XCTAssertEqual(localDTO.score, -2)
+        XCTAssertEqual(localDTO.tickers, ["SPY"])
+    }
+
+    func test_NewsLocalDTO_toDomain() {
+        let testURL = URL(string: "https://example.com/test")!
+        let publishedDate = Date()
+        let createdDate = Date().addingTimeInterval(-7200)
+        let cachedDate = Date().addingTimeInterval(-1800)
+
+        let localDTO = NewsLocalDTO(
+            id: 789,
+            title: "Apple Earnings Beat",
+            summarize: "Apple reports strong quarterly results",
+            url: testURL,
+            published_date: publishedDate,
+            score: 9,
+            tickers: ["AAPL"],
+            created_at: createdDate
+        )
+
+        let newsEntity = localDTO.toDomain()
+
+        XCTAssertEqual(newsEntity.id, 789)
+        XCTAssertEqual(newsEntity.title, "Apple Earnings Beat")
+        XCTAssertEqual(newsEntity.summarize, "Apple reports strong quarterly results")
+        XCTAssertEqual(newsEntity.url, testURL)
+        XCTAssertEqual(newsEntity.published_date, publishedDate)
+        XCTAssertEqual(newsEntity.score, 9)
+        XCTAssertEqual(newsEntity.tickers, ["AAPL"])
+        XCTAssertEqual(newsEntity.created_at, createdDate)
+    }
+
+    func test_NewsLocalDTO_roundTripConversion() {
+        let originalEntity = NewsEntity(
+            id: 999,
+            title: "Round Trip Test",
+            summarize: "Testing conversion integrity",
+            url: URL(string: "https://roundtrip.com"),
+            published_date: Date(),
+            score: 5,
+            tickers: ["TEST", "ROUND"],
+            created_at: Date().addingTimeInterval(-3600)
+        )
+
+        let localDTO = NewsLocalDTO(from: originalEntity)
+        let convertedEntity = localDTO.toDomain()
+
+        XCTAssertEqual(originalEntity.id, convertedEntity.id)
+        XCTAssertEqual(originalEntity.title, convertedEntity.title)
+        XCTAssertEqual(originalEntity.summarize, convertedEntity.summarize)
+        XCTAssertEqual(originalEntity.url, convertedEntity.url)
+        XCTAssertEqual(originalEntity.published_date, convertedEntity.published_date)
+        XCTAssertEqual(originalEntity.score, convertedEntity.score)
+        XCTAssertEqual(originalEntity.tickers, convertedEntity.tickers)
+        XCTAssertEqual(originalEntity.created_at, convertedEntity.created_at)
+    }
+
+    func test_NewsLocalDTO_cachedAtIsSet() {
+        let beforeInit = Date()
+        let localDTO = NewsLocalDTO(
+            id: 1,
+            title: "Cache Test",
+            summarize: "Testing cache timestamp",
+            url: nil,
+            published_date: Date(),
+            score: 0,
+            tickers: [],
+            created_at: Date()
+        )
+        let afterInit = Date()
+
+        XCTAssertTrue(localDTO.cached_at >= beforeInit)
+        XCTAssertTrue(localDTO.cached_at <= afterInit)
     }
 }
