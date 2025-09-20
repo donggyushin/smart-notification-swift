@@ -115,6 +115,7 @@ struct NewsDetailView: View {
                         Image(systemName: news.save ? "bookmark.fill" : "bookmark")
                             .foregroundColor(news.save ? .yellow : .primary)
                     }
+                    .accessibilityIdentifier("saveButton")
                 }
             }
         }

@@ -21,6 +21,40 @@ final class SmartNotificationUITests: XCTestCase {
         app = nil
     }
     
+    func test_manage_shared_states() async throws {
+        // Wait for API response
+        try await Task.sleep(for: .seconds(5))
+        
+        let bookmarkImage = await app.collectionViews.firstMatch.cells.firstMatch.buttons["bookmark.fill"]
+        let initialSaveStatus = await bookmarkImage.exists
+        print(initialSaveStatus)
+        
+        // Move to Detail View.
+        await app.collectionViews.firstMatch.cells.firstMatch.tap()
+        
+        // Wait for API response
+        try await Task.sleep(for: .seconds(1))
+        
+        let saveButton = await app.buttons["saveButton"]
+        
+        // Change the value in Detail
+        await saveButton.tap()
+        
+        // Wait for API response
+        try await Task.sleep(for: .seconds(2))
+        
+        // Move back to list page
+        await app.buttons["Market News"].tap()
+        
+        try await Task.sleep(for: .seconds(1))
+        
+        // Check the first cell's value is changed
+        let bookmarkImage3 = await app.collectionViews.firstMatch.cells.firstMatch.buttons["bookmark.fill"]
+        let initialSaveStatus3 = await bookmarkImage3.exists
+        
+        XCTAssertNotEqual(initialSaveStatus3, initialSaveStatus)
+    }
+    
     func test_change_tab_test() async throws {
         // Tap the "Saved" tab
         let savedTabButton = await app.tabBars.buttons["Saved"]
