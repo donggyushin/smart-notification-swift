@@ -6,32 +6,30 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
+import Domain
 
 struct SavedNewsListView: View {
     
-    @StateObject var model: SavedNewsListViewModel
+    let store: StoreOf<SavedNewsListFeature>
     
     var body: some View {
         List {
-            ForEach(model.news, id: \.id) { newsItem in
+            ForEach(store.news, id: \.id) { newsItem in
                 NewsItemRow(newsItem: newsItem) { _ in
-                    Task {
-                        try await model.saveNews(newsItem)
-                    }
+                    store.send(.saveNews(newsItem))
                 }
                 .onTapGesture {
                     coordinator?.push(.news(newsItem.id))
                 }
                 .onAppear {
-                    if newsItem.id == model.news.last?.id {
-                        Task {
-                            try? await model.fetchSavedNews()
-                        }
+                    if newsItem.id == store.news.last?.id {
+                        store.send(.fetchSavedNews)
                     }
                 }
             }
             
-            if model.loading {
+            if store.loading {
                 HStack {
                     Spacer()
                     ProgressView()
@@ -44,15 +42,10 @@ struct SavedNewsListView: View {
         .scrollIndicators(.never)
         .navigationTitle("Saved News")
         .refreshable {
-            try? await model.refresh()
+            store.send(.reload)
         }
         .task {
-            try? await model.fetchSavedNews()
+            store.send(.fetchSavedNews)
         }
     }
-}
-
-#Preview {
-    SavedNewsListView(model: .init())
-        .preferredColorScheme(.dark)
 }

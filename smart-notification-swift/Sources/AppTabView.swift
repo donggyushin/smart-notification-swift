@@ -19,7 +19,9 @@ struct AppTabView: View {
                 Text("News")
             }
             
-            SavedNewsListView(model: .init())
+            SavedNewsListView(store: .init(initialState: SavedNewsListFeature.State(), reducer: {
+                SavedNewsListFeature()
+            }))
                 .tabItem {
                     Image(systemName: "bookmark.fill")
                     Text("Saved")
