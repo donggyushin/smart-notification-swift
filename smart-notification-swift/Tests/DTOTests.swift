@@ -21,7 +21,8 @@ final class DTOTests: XCTestCase {
             published_date: "2025-09-19T10:30:00Z",
             score: 8,
             tickers: ["AAPL", "MSFT"],
-            created_at: "2025-09-19T10:30:00Z"
+            created_at: "2025-09-19T10:30:00Z",
+            save: Bool.random()
         )
 
         let newsEntity = newsDTO.toDomain()
@@ -43,7 +44,8 @@ final class DTOTests: XCTestCase {
             published_date: "2025-09-19T10:30:00Z",
             score: -3,
             tickers: ["SPY"],
-            created_at: "2025-09-19T10:30:00Z"
+            created_at: "2025-09-19T10:30:00Z",
+            save: Bool.random()
         )
 
         let newsEntity = newsDTO.toDomain()
@@ -64,7 +66,8 @@ final class DTOTests: XCTestCase {
             published_date: "2025-09-19T10:30:00Z",
             score: 5,
             tickers: ["AAPL"],
-            created_at: "2025-09-19T10:30:00Z"
+            created_at: "2025-09-19T10:30:00Z",
+            save: Bool.random()
         )
 
         let newsDTO2 = NewsDTO(
@@ -75,7 +78,8 @@ final class DTOTests: XCTestCase {
             published_date: "2025-09-19T11:30:00Z",
             score: -2,
             tickers: ["GOOGL"],
-            created_at: "2025-09-19T11:30:00Z"
+            created_at: "2025-09-19T11:30:00Z",
+            save: Bool.random()
         )
 
         let responseDTO = NewsResponseDTO(
@@ -124,7 +128,8 @@ final class DTOTests: XCTestCase {
             published_date: publishedDate,
             score: 7,
             tickers: ["TSLA", "NIO"],
-            created_at: createdDate
+            created_at: createdDate,
+            save: Bool.random()
         )
 
         let localDTO = NewsLocalDTO(from: newsEntity)
@@ -152,7 +157,8 @@ final class DTOTests: XCTestCase {
             published_date: publishedDate,
             score: -2,
             tickers: ["SPY"],
-            created_at: createdDate
+            created_at: createdDate,
+            save: Bool.random()
         )
 
         let localDTO = NewsLocalDTO(from: newsEntity)
@@ -178,7 +184,8 @@ final class DTOTests: XCTestCase {
             published_date: publishedDate,
             score: 9,
             tickers: ["AAPL"],
-            created_at: createdDate
+            created_at: createdDate,
+            save: Bool.random()
         )
 
         let newsEntity = localDTO.toDomain()
@@ -202,7 +209,8 @@ final class DTOTests: XCTestCase {
             published_date: Date(),
             score: 5,
             tickers: ["TEST", "ROUND"],
-            created_at: Date().addingTimeInterval(-3600)
+            created_at: Date().addingTimeInterval(-3600),
+            save: Bool.random()
         )
 
         let localDTO = NewsLocalDTO(from: originalEntity)
@@ -228,7 +236,8 @@ final class DTOTests: XCTestCase {
             published_date: Date(),
             score: 0,
             tickers: [],
-            created_at: Date()
+            created_at: Date(),
+            save: Bool.random()
         )
         let afterInit = Date()
 

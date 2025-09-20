@@ -20,4 +20,11 @@ final class NewsDetailViewModelTests: XCTestCase {
         viewModel = nil
         super.tearDown()
     }
+    
+    func test_NewsDetailViewModel_fetchNewsData() async throws {
+        XCTAssertNil(viewModel.news)
+        try await viewModel.fetchNewsData()
+        XCTAssertFalse(viewModel.loading)
+        XCTAssertNotNil(viewModel.news)
+    }
 }
