@@ -27,7 +27,6 @@ final class SmartNotificationUITests: XCTestCase {
         
         let bookmarkImage = await app.collectionViews.firstMatch.cells.firstMatch.buttons["bookmark.fill"]
         let initialSaveStatus = await bookmarkImage.exists
-        print(initialSaveStatus)
         
         // Move to Detail View.
         await app.collectionViews.firstMatch.cells.firstMatch.tap()
