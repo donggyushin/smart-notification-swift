@@ -10,6 +10,8 @@ import Domain
 
 public final class MockRepository: Repository {
     public func save(news: NewsEntity, save: Bool) async throws -> NewsEntity {
+        var news = news
+        news.save = save
         return news
     }
     
@@ -39,7 +41,7 @@ public final class MockRepository: Repository {
                 score: 8,
                 tickers: ["AAPL", "MSFT", "JPM", "BAC"],
                 created_at: Date().addingTimeInterval(-3600),
-                save: Bool.random()
+                save: false
             ),
             NewsEntity(
                 id: 2,

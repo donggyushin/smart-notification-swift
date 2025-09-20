@@ -39,7 +39,7 @@ public struct NewsEntity: Equatable {
     /// Stock tickers that may be affected by this news
     public let tickers: [String]
     public let created_at: Date
-    public let save: Bool
+    public var save: Bool
     
     public init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String], created_at: Date, save: Bool) {
         self.id = id
