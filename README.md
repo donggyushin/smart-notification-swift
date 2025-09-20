@@ -46,7 +46,7 @@ App → Service → Domain → ThirdPartyLibrary
 - DTOs and networking logic
 
 **App**: UI, ViewModels, and dependency injection
-- SwiftUI views with MVVM pattern
+- SwiftUI views with MVVM pattern and **The Composable Architecture (TCA)** for shared state
 - Custom dependency injection system
 - Navigation coordination
 
@@ -113,16 +113,20 @@ final class NewsListViewModel: ObservableObject {
 - **Push Notifications**: Instant alerts for high-impact market events
 - **Clean UI**: Simple, focused interface built with SwiftUI
 - **Pull-to-Refresh**: Easy data updates with native iOS patterns
+- **Advanced State Management**: TCA powers seamless shared state across the app
+- **Comprehensive Testing**: Robust test coverage including unit tests, TCA store tests, and UI automation tests
 
 ## Technology Stack
 
 - **iOS**: SwiftUI, Combine, async/await
-- **Architecture**: MVVM with Repository pattern
+- **Architecture**: MVVM with Repository pattern + **TCA for shared state management**
+- **State Management**: The Composable Architecture (TCA) for complex flows, ViewModels for simple screens
 - **DI**: Custom property wrapper system
 - **Networking**: Alamofire
 - **Local Storage**: SwiftData for caching
 - **Push Notifications**: Firebase Messaging
 - **Build System**: Tuist for project generation
+- **Testing**: Comprehensive test suite including TCA TestStore and UITests
 
 ## Getting Started
 

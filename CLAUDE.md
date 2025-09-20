@@ -54,18 +54,31 @@ App → Service → Domain → ThirdPartyLibrary
 - `Container` singleton manages dependency resolution and environment detection
 - Usage: `@Injected(\.repository) var repository` and `@Injected(\.cache) var cache`
 
-**MVVM Pattern**:
-- SwiftUI Views bind to ObservableObject ViewModels
-- ViewModels handle business logic and state management
-- Example: `NewsListView` + `NewsListViewModel`
+**The Composable Architecture (TCA)**:
+- `@Reducer` structs define state, actions, and business logic
+- `@ObservableState` provides reactive state updates to SwiftUI views
+- `StoreOf<Feature>` connects views to reducers with scoped state/actions
+- Dependency injection via `@Injected` property wrapper
+- Example: `AppFeature`, `NewsListFeature`, `SavedNewsListFeature`
+
+**State Management Architecture**:
+- `AppFeature`: Parent reducer managing tab navigation and data synchronization
+- `NewsListFeature`: Handles main news feed with pagination, caching, and save functionality
+- `SavedNewsListFeature`: Manages saved news with separate API endpoints
+- Data flows bidirectionally between features via parent-child communication
 
 ### Project Structure
 
 ```
 smart-notification-swift/Sources/
 ├── News/                           # News feature module
+├── Store/                          # TCA reducers and state management
+│   ├── AppFeature.swift           # Parent reducer with data sync
+│   ├── NewsListFeature.swift      # Main news feed state/actions
+│   └── SavedNewsListFeature.swift # Saved news state/actions
 ├── DependencyInjection/           # DI system (@Injected, Container)
 ├── Coordinator/                   # Navigation coordination
+├── AppTabView.swift               # Tab-based navigation with TCA
 └── App files (ContentView, App)
 
 Domain/Sources/
@@ -90,6 +103,7 @@ Service/Sources/
 - Firebase (Auth, Messaging) - Push notifications and authentication
 - Alamofire - HTTP networking
 - SwiftData - Local data persistence and caching
+- **The Composable Architecture (TCA)** - State management, side effects, and testing
 
 **Environment Detection**:
 The Container automatically detects runtime environment:
@@ -116,6 +130,24 @@ The Container automatically detects runtime environment:
 ## Development Notes
 
 - SwiftUI with iOS target
-- Uses `@StateObject` for ViewModels and `@Published` for reactive properties
-- All async operations use Swift's async/await pattern
+- **TCA-based state management** with `@Reducer` and `@ObservableState`
+- All async operations use Swift's async/await pattern with TCA's `.run` effects
 - Tuist project generation ensures consistent build configuration across team members
+
+### TCA Implementation Details
+
+**Feature Architecture**:
+- Each feature has its own `State`, `Action`, and reducer logic
+- Parent-child relationships enable data synchronization across tabs
+- `AppFeature.syncData` action keeps news lists consistent when items are saved/unsaved
+
+**Key TCA Patterns Used**:
+- **Scoped Stores**: `store.scope(state: \.newsList, action: \.newsList)`
+- **Effect Composition**: Using `.run` for async API calls
+- **State Synchronization**: Parent reducer updates multiple child states
+- **Dependency Injection**: TCA works seamlessly with existing `@Injected` system
+
+**Testing Strategy**:
+- TCA `TestStore` for comprehensive state management testing
+- Store tests verify state mutations, side effects, and async actions
+- UI tests complement store tests for end-to-end validation
