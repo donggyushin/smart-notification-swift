@@ -9,6 +9,13 @@ import Foundation
 import Domain
 
 public final class MockRepository: Repository {
+    public func save(news: NewsEntity, save: Bool) async throws -> NewsEntity {
+        return news
+    }
+    
+    public func getSavedNewsFeed(cursor_id: Int?) async throws -> NewsResponse {
+        try await getNewsFeed(cursor_id: cursor_id)
+    }
     
     public init() {}
     
@@ -31,7 +38,8 @@ public final class MockRepository: Repository {
                 published_date: Date().addingTimeInterval(-3600), // 1 hour ago
                 score: 8,
                 tickers: ["AAPL", "MSFT", "JPM", "BAC"],
-                created_at: Date().addingTimeInterval(-3600)
+                created_at: Date().addingTimeInterval(-3600),
+                save: Bool.random()
             ),
             NewsEntity(
                 id: 2,
@@ -41,7 +49,8 @@ public final class MockRepository: Repository {
                 published_date: Date().addingTimeInterval(-7200), // 2 hours ago
                 score: 6,
                 tickers: ["GOOGL", "AMZN", "META", "NFLX"],
-                created_at: Date().addingTimeInterval(-7200)
+                created_at: Date().addingTimeInterval(-7200),
+                save: Bool.random()
             ),
             NewsEntity(
                 id: 3,
@@ -51,7 +60,8 @@ public final class MockRepository: Repository {
                 published_date: Date().addingTimeInterval(-10800), // 3 hours ago
                 score: -4,
                 tickers: ["XOM", "CVX", "BP", "SLB"],
-                created_at: Date().addingTimeInterval(-10800)
+                created_at: Date().addingTimeInterval(-10800),
+                save: Bool.random()
             )
         ]
         

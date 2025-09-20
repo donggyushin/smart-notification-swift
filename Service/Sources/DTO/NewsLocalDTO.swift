@@ -20,8 +20,9 @@ final class NewsLocalDTO {
     var tickers: [String]
     var cached_at: Date
     var created_at: Date
+    var save: Bool
 
-    init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String], created_at: Date) {
+    init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String], created_at: Date, save: Bool) {
         self.id = id
         self.title = title
         self.summarize = summarize
@@ -31,6 +32,7 @@ final class NewsLocalDTO {
         self.tickers = tickers
         self.cached_at = Date()
         self.created_at = created_at
+        self.save = save
     }
 
     // Convert from Domain Entity to DTO
@@ -43,7 +45,8 @@ final class NewsLocalDTO {
             published_date: entity.published_date,
             score: entity.score,
             tickers: entity.tickers,
-            created_at: entity.created_at
+            created_at: entity.created_at,
+            save: entity.save
         )
     }
 
@@ -57,7 +60,8 @@ final class NewsLocalDTO {
             published_date: self.published_date,
             score: self.score,
             tickers: self.tickers,
-            created_at: self.created_at
+            created_at: self.created_at,
+            save: self.save
         )
     }
 }

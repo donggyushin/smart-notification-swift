@@ -23,7 +23,8 @@ public final class MockCacheRepository: CacheRepository {
                 published_date: Date().addingTimeInterval(-7200), // 2 hours ago
                 score: 7,
                 tickers: ["AAPL", "MSFT"],
-                created_at: Date().addingTimeInterval(-7200)
+                created_at: Date().addingTimeInterval(-7200),
+                save: Bool.random()
             ),
             NewsEntity(
                 id: 102,
@@ -33,7 +34,8 @@ public final class MockCacheRepository: CacheRepository {
                 published_date: Date().addingTimeInterval(-14400), // 4 hours ago
                 score: 5,
                 tickers: ["SPY", "QQQ", "JPM"],
-                created_at: Date().addingTimeInterval(-14400)
+                created_at: Date().addingTimeInterval(-14400),
+                save: Bool.random()
             )
         ]
     }

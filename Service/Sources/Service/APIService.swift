@@ -14,6 +14,23 @@ public final class APIService {
     
     public init() { }
     
+    public func save(news: NewsEntity, save: Bool) async throws -> NewsEntity {
+        let response: NewsDTO = try await apiClient.request(
+            "/news/\(news.id)/save",
+            method: save ? .post : .delete
+        )
+        return response.toDomain()
+    }
+    
+    public func getSavedNewsFeed(cursor_id: Int?) async throws -> NewsResponse {
+        var parameters: [String: Any] = [:]
+        if let cursor_id = cursor_id {
+            parameters["cursor_id"] = cursor_id
+        }
+        let response: NewsResponseDTO = try await apiClient.request("/news/saved/feed", parameters: parameters)
+        return response.toDomain()
+    }
+    
     public func postDevice(device_uuid: String, fcm_token: String) async throws {
         let _: EmptyDTO = try await apiClient.request(
             "/devices",

@@ -33,6 +33,7 @@ public struct NewsDTO: Codable {
     let score: Int
     let tickers: [String]
     let created_at: String
+    let save: Bool
     
     public func toDomain() -> NewsEntity {
         let newsURL = url.flatMap { URL(string: $0) }
@@ -47,7 +48,8 @@ public struct NewsDTO: Codable {
             published_date: publishedDate,
             score: score,
             tickers: tickers,
-            created_at: createdAtDate
+            created_at: createdAtDate,
+            save: save
         )
     }
 }

@@ -24,5 +24,13 @@ public final class RepositoryImpl: Repository {
         try await apiService.getNews(id: id)
     }
     
+    public func save(news: NewsEntity, save: Bool) async throws -> NewsEntity {
+        try await apiService.save(news: news, save: save)
+    }
+    
+    public func getSavedNewsFeed(cursor_id: Int?) async throws -> NewsResponse {
+        try await apiService.getSavedNewsFeed(cursor_id: cursor_id)
+    }
+    
     public init() { }
 }

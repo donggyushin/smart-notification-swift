@@ -8,7 +8,7 @@
 import Foundation
 
 public struct NewsResponse {
-    public let items: [NewsEntity]
+    public var items: [NewsEntity]
     public let next_cursor_id: Int?
     public let has_more: Bool
     public let limit: Int
@@ -39,8 +39,9 @@ public struct NewsEntity {
     /// Stock tickers that may be affected by this news
     public let tickers: [String]
     public let created_at: Date
+    public let save: Bool
     
-    public init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String], created_at: Date) {
+    public init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String], created_at: Date, save: Bool) {
         self.id = id
         self.title = title
         self.summarize = summarize
@@ -49,5 +50,6 @@ public struct NewsEntity {
         self.score = score
         self.tickers = tickers
         self.created_at = created_at
+        self.save = save
     }
 }
