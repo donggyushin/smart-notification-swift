@@ -14,10 +14,17 @@ public final class SwiftDataService {
     private let modelContext: ModelContext
 
     public init() {
-        let schema = Schema([NewsLocalDTO.self])
-        let configuration = ModelConfiguration(schema: schema)
-        let container = try! ModelContainer(for: schema, configurations: [configuration])
-        self.modelContext = ModelContext(container)
+        do {
+            let container = try ModelContainer(for: NewsLocalDTO.self)
+            self.modelContext = ModelContext(container)
+        } catch {
+            print("Failed to create ModelContainer: \(error)")
+            // Fallback: create container with explicit schema
+            let schema = Schema([NewsLocalDTO.self])
+            let configuration = ModelConfiguration(schema: schema)
+            let container = try! ModelContainer(for: schema, configurations: [configuration])
+            self.modelContext = ModelContext(container)
+        }
     }
 
     public func getNews() -> [NewsEntity] {
@@ -58,6 +65,23 @@ public final class SwiftDataService {
             try modelContext.save()
         } catch {
             print("Failed to save cached news: \(error)")
+        }
+    }
+
+    public func updateNewsSaveStatus(newsId: Int, isSaved: Bool) {
+        let predicate = #Predicate<NewsLocalDTO> { dto in
+            dto.id == newsId
+        }
+        let descriptor = FetchDescriptor<NewsLocalDTO>(predicate: predicate)
+
+        do {
+            let existingItems = try modelContext.fetch(descriptor)
+            if let item = existingItems.first {
+                item.save = isSaved
+                try modelContext.save()
+            }
+        } catch {
+            print("Failed to update news save status: \(error)")
         }
     }
 

@@ -8,7 +8,7 @@ public struct ContentView: View {
 
     public var body: some View {
         NavigationStack(path: $path) {
-            NewsListView(model: .init())
+            AppTabView()
                 .navigationDestination(for: NavigationPath.self) { path in
                     switch path {
                     case .news(let id):

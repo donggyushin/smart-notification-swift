@@ -20,7 +20,7 @@ final class NewsLocalDTO {
     var tickers: [String]
     var cached_at: Date
     var created_at: Date
-    var save: Bool
+    var save: Bool = false 
 
     init(id: Int, title: String, summarize: String, url: URL?, published_date: Date, score: Int, tickers: [String], created_at: Date, save: Bool) {
         self.id = id
