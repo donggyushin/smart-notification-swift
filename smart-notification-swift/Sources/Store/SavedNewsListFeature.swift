@@ -52,6 +52,11 @@ struct SavedNewsListFeature {
                 return .none
                 
             case .fetchSavedNews:
+                
+                if state.news.isEmpty {
+                    state.news = saveNewsUseCase.fetch()
+                }
+                
                 guard state.loading == false, state.has_more else { return .none }
                 state.loading = true
                 return .run { [cursorId = state.next_cursor_id] send in

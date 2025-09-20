@@ -36,7 +36,7 @@ extension Container {
 extension Container {
     var saveNewsUseCase: Factory<SaveNewsUseCase> {
         self {
-            SaveNewsUseCase(repository: self.repository())
+            SaveNewsUseCase(repository: self.repository(), cache: self.cache())
         }
         .shared
     }
