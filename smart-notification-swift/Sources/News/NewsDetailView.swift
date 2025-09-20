@@ -116,6 +116,21 @@ struct NewsDetailView: View {
             }
             .navigationTitle("News Detail")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if let news = model.news {
+                        Button(action: {
+                            Task {
+                                let news = try await model.save()
+                                store.send(.syncData(news))
+                            }
+                        }) {
+                            Image(systemName: news.save ? "bookmark.fill" : "bookmark")
+                                .foregroundColor(news.save ? .yellow : .primary)
+                        }
+                    }
+                }
+            }
         }
         .task {
             try? await model.fetchNewsData()

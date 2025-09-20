@@ -10,4 +10,5 @@ import Foundation
 public enum AppError: Error {
     case decode
     case custom(String)
+    case unknown
 }

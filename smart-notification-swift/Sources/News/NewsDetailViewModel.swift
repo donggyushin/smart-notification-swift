@@ -12,6 +12,7 @@ import Domain
 
 final class NewsDetailViewModel: ObservableObject {
     @Injected(\.repository) private var repository
+    @Injected(\.saveNewsUseCase) private var saveNewsUseCase
     
     @Published var news: NewsEntity?
     @Published var loading = false
@@ -27,5 +28,16 @@ final class NewsDetailViewModel: ObservableObject {
         loading = true
         defer { loading = false }
         news = try await repository.getNews(id: newsId)
+    }
+    
+    @MainActor
+    func save() async throws -> NewsEntity {
+        guard let news else { throw AppError.unknown }
+        guard loading == false else { throw AppError.unknown }
+        loading = true
+        defer { loading = false }
+        let updated = try await saveNewsUseCase.execute(news: news)
+        self.news = updated
+        return updated
     }
 }
