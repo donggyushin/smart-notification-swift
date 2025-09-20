@@ -29,6 +29,9 @@ final class NewsListViewModel: ObservableObject {
     
     @MainActor
     func saveNews(_ news: NewsEntity) async throws {
+        guard loading == false else { return }
+        loading = true
+        defer { loading = false }
         let news = try await saveFeedUseCase.execute(news: news)
         guard let index = self.news.firstIndex(where: { $0.id == news.id }) else { return }
         self.news[index] = news

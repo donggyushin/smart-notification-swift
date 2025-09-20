@@ -98,7 +98,8 @@ let project = Project(
             ],
             dependencies: [
                 .external(name: "Alamofire"),
-                .external(name: "Container")
+                .external(name: "Container"),
+                .external(name: "ComposableArchitecture")
             ]
         ),
     ]

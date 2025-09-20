@@ -23,7 +23,7 @@ public struct NewsResponse {
 
 /// Represents a news article that has been analyzed by CrewAI for its potential impact on the US stock market.
 /// The server searches for news with high potential impact and provides analysis and scoring.
-public struct NewsEntity {
+public struct NewsEntity: Equatable {
     /// Unique identifier for the news article
     public let id: Int
     /// Title of the news article
