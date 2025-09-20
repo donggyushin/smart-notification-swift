@@ -46,9 +46,9 @@ struct SavedNewsListView: View {
         .refreshable {
             try? await model.refresh()
         }
-        .task {
-            if model.news.isEmpty {
-                try? await model.fetchSavedNews()
+        .onAppear {
+            Task {
+                try? await model.refresh()
             }
         }
     }
