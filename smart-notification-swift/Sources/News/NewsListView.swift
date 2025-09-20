@@ -55,3 +55,10 @@ struct NewsListView: View {
         }
     }
 }
+
+#Preview {
+    NewsListView(store: .init(initialState: NewsListFeature.State(), reducer: {
+        NewsListFeature()
+    }))
+    .preferredColorScheme(.dark)
+}
