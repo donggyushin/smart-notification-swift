@@ -72,6 +72,8 @@ struct NewsListFeature {
                 state.next_cursor_id = response.next_cursor_id
                 state.has_more = response.has_more
                 state.news = response.items
+                cache.clearAllNewsData()
+                cache.saveNews(response.items)
                 return .none
                 
             case .prepareInitialData:

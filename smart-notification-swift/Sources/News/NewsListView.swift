@@ -41,13 +41,11 @@ struct NewsListView: View {
         .scrollIndicators(.never)
         .refreshable {
             store.send(.reload)
-            store.send(.saveCache)
         }
         .task {
             if store.news.isEmpty {
                 store.send(.prepareInitialData)
                 store.send(.fetchNews)
-                store.send(.saveCache)
             }
         }
     }
