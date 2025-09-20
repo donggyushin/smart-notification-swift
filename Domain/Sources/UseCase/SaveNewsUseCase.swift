@@ -1,5 +1,5 @@
 //
-//  SaveFeedUseCase.swift
+//  SaveNewsUseCase.swift
 //  Domain
 //
 //  Created by 신동규 on 9/20/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class SaveFeedUseCase {
+public final class SaveNewsUseCase {
     let repository: Repository
     
     public init(repository: Repository) {

@@ -34,7 +34,7 @@ struct NewsListFeature {
     
     @Injected(\.repository) private var repository
     @Injected(\.cache) var cache
-    @Injected(\.saveFeedUseCase) var saveFeedUseCase
+    @Injected(\.saveNewsUseCase) var saveNewsUseCase
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -83,7 +83,7 @@ struct NewsListFeature {
                 guard state.loading == false else { return .none }
                 state.loading = true
                 return .run { send in
-                    await send(.saveNewsResponse(try await saveFeedUseCase.execute(news: news)))
+                    await send(.saveNewsResponse(try await saveNewsUseCase.execute(news: news)))
                 }
             case .saveNewsResponse(let news):
                 state.loading = false

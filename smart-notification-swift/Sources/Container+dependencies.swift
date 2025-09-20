@@ -34,9 +34,9 @@ extension Container {
 
 // Register UseCases
 extension Container {
-    var saveFeedUseCase: Factory<SaveFeedUseCase> {
+    var saveNewsUseCase: Factory<SaveNewsUseCase> {
         self {
-            SaveFeedUseCase(repository: self.repository())
+            SaveNewsUseCase(repository: self.repository())
         }
         .shared
     }
