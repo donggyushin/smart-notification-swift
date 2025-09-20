@@ -30,6 +30,7 @@ struct SavedNewsListFeature {
         
         case saveNews(NewsEntity)
         case saveNewsResponse(NewsEntity)
+        case saveNewsFailure(NewsEntity)
     }
     
     @Injected(\.repository) private var repository
@@ -82,17 +83,27 @@ struct SavedNewsListFeature {
                 return .none
                 
             case .saveNews(let news):
-                guard state.loading == false else { return .none }
-                state.loading = true
-                return .run { send in
-                    let response = try await saveNewsUseCase.execute(news: news)
-                    await send(.saveNewsResponse(response))
+                // Don't wait for response. Change state immediately
+                if let index = state.news.firstIndex(where: { $0.id == news.id }) {
+                    state.news[index].save.toggle()
                 }
-                
+                return .run { send in
+                    do {
+                        let response = try await saveNewsUseCase.execute(news: news)
+                        await send(.saveNewsResponse(response))
+                    } catch {
+                        await send(.saveNewsFailure(news))
+                    }
+                    
+                }
             case .saveNewsResponse(let news):
-                state.loading = false
                 guard let index = state.news.firstIndex(where: { $0.id == news.id }) else { return .none }
                 state.news[index] = news
+                return .none
+            case .saveNewsFailure(let news):
+                if let index = state.news.firstIndex(where: { $0.id == news.id }) {
+                    state.news[index].save.toggle()
+                }
                 return .none
             }
         }
