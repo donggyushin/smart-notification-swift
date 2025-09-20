@@ -9,19 +9,18 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AppTabView: View {
+    
+    let store: StoreOf<AppFeature>
+    
     var body: some View {
         TabView {
-            NewsListView(store: .init(initialState: NewsListFeature.State()) {
-                NewsListFeature()
-            })
-            .tabItem {
-                Image(systemName: "newspaper")
-                Text("News")
-            }
+            NewsListView(store: store.scope(state: \.newsList, action: \.newsList) )
+                .tabItem {
+                    Image(systemName: "newspaper")
+                    Text("News")
+                }
             
-            SavedNewsListView(store: .init(initialState: SavedNewsListFeature.State(), reducer: {
-                SavedNewsListFeature()
-            }))
+            SavedNewsListView(store: store.scope(state: \.savedNewsList, action: \.savedNewsList))
                 .tabItem {
                     Image(systemName: "bookmark.fill")
                     Text("Saved")
