@@ -20,6 +20,26 @@ final class SmartNotificationUITests: XCTestCase {
     override func tearDownWithError() throws {
         app = nil
     }
+    
+    func test_change_tab_test() async throws {
+        // Tap the "Saved" tab
+        let savedTabButton = await app.tabBars.buttons["Saved"]
+        await savedTabButton.tap()
+
+        // Verify the navigation title changed to "Saved News"
+        let savedNewsTitle = await app.navigationBars["Saved News"]
+        let savedNewsTitleExists = await savedNewsTitle.exists
+        XCTAssertTrue(savedNewsTitleExists)
+        
+        // Tap the "News" tab again
+        let newsTabButton = await app.tabBars.buttons["News"]
+        await newsTabButton.tap()
+        
+        // Verify now Saved News title is disappeared.
+        let savedNewsTitle2 = await app.navigationBars["Saved News"]
+        let savedNewsTitleExists2 = await savedNewsTitle2.exists
+        XCTAssertFalse(savedNewsTitleExists2)
+    }
 
     // Test that NewsListView displays news items and navigate to NewsDetailView and open safari for stock item
     func test_open_stock_full_article() async throws {

@@ -40,7 +40,6 @@ struct SavedNewsListView: View {
             }
         }
         .scrollIndicators(.never)
-        .navigationTitle("Saved News")
         .refreshable {
             store.send(.reload)
         }

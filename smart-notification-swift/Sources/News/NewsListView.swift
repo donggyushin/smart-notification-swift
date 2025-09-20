@@ -39,7 +39,6 @@ struct NewsListView: View {
             }
         }
         .scrollIndicators(.never)
-        .navigationTitle("Market News")
         .refreshable {
             store.send(.reload)
             store.send(.saveCache)
