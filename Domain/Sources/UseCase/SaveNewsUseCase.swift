@@ -19,8 +19,4 @@ public final class SaveNewsUseCase {
     public func execute(news: NewsEntity) async throws -> NewsEntity {
         try await repository.save(news: news, save: !news.save)
     }
-    
-    public func fetch() -> [NewsEntity] {
-        cache.getNews().filter { $0.save }
-    }
 }

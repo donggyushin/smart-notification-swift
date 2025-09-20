@@ -9,25 +9,25 @@ import Foundation
 import Domain
 import SwiftData
 
-public final class SwiftDataService {
+final class SwiftDataService {
 
     private let modelContext: ModelContext
 
-    public init() {
+    init() {
         do {
-            let container = try ModelContainer(for: NewsLocalDTO.self)
+            let container = try ModelContainer(for: NewsLocalDTO.self, SavedNewsLocalDTO.self)
             self.modelContext = ModelContext(container)
         } catch {
             print("Failed to create ModelContainer: \(error)")
             // Fallback: create container with explicit schema
-            let schema = Schema([NewsLocalDTO.self])
+            let schema = Schema([NewsLocalDTO.self, SavedNewsLocalDTO.self])
             let configuration = ModelConfiguration(schema: schema)
             let container = try! ModelContainer(for: schema, configurations: [configuration])
             self.modelContext = ModelContext(container)
         }
     }
 
-    public func getNews() -> [NewsEntity] {
+    func getNews() -> [NewsEntity] {
         let descriptor = FetchDescriptor<NewsLocalDTO>(
             sortBy: [SortDescriptor(\.created_at, order: .reverse)]
         )
@@ -41,7 +41,7 @@ public final class SwiftDataService {
         }
     }
 
-    public func saveNews(_ news: [NewsEntity]) {
+    func saveNews(_ news: [NewsEntity]) {
         for newsItem in news {
             // Check if item already exists
             let itemId = newsItem.id
@@ -68,7 +68,7 @@ public final class SwiftDataService {
         }
     }
 
-    public func updateNewsSaveStatus(newsId: Int, isSaved: Bool) {
+    func updateNewsSaveStatus(newsId: Int, isSaved: Bool) {
         let predicate = #Predicate<NewsLocalDTO> { dto in
             dto.id == newsId
         }
@@ -85,7 +85,7 @@ public final class SwiftDataService {
         }
     }
 
-    public func clearAllNewsData() {
+    func clearAllNewsData() {
         let descriptor = FetchDescriptor<NewsLocalDTO>()
 
         do {
@@ -96,6 +96,61 @@ public final class SwiftDataService {
             try modelContext.save()
         } catch {
             print("Failed to clear all news data: \(error)")
+        }
+    }
+
+    func saveSavedNews(_ news: [NewsEntity]) {
+        for newsItem in news {
+            // Check if item already exists in saved news
+            let itemId = newsItem.id
+            let predicate = #Predicate<SavedNewsLocalDTO> { dto in
+                dto.id == itemId
+            }
+            let descriptor = FetchDescriptor<SavedNewsLocalDTO>(predicate: predicate)
+
+            do {
+                let existingItems = try modelContext.fetch(descriptor)
+                if existingItems.isEmpty {
+                    let dto = SavedNewsLocalDTO(from: newsItem)
+                    modelContext.insert(dto)
+                }
+            } catch {
+                print("Failed to check existing saved news item: \(error)")
+            }
+        }
+
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save saved news: \(error)")
+        }
+    }
+
+    func getSavedNews() -> [NewsEntity] {
+        let descriptor = FetchDescriptor<SavedNewsLocalDTO>(
+            sortBy: [SortDescriptor(\.created_at, order: .reverse)]
+        )
+
+        do {
+            let dtos = try modelContext.fetch(descriptor)
+            return dtos.map { $0.toDomain() }
+        } catch {
+            print("Failed to fetch saved news: \(error)")
+            return []
+        }
+    }
+
+    func clearSavedNews() {
+        let descriptor = FetchDescriptor<SavedNewsLocalDTO>()
+
+        do {
+            let allItems = try modelContext.fetch(descriptor)
+            for item in allItems {
+                modelContext.delete(item)
+            }
+            try modelContext.save()
+        } catch {
+            print("Failed to clear saved news: \(error)")
         }
     }
 }

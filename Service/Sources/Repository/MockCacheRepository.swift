@@ -11,6 +11,7 @@ import Domain
 public final class MockCacheRepository: CacheRepository {
 
     private var cachedNews: [NewsEntity] = []
+    private var savedNews: [NewsEntity] = []
 
     public init() {
         // Pre-populate with some mock cached data for previews
@@ -57,5 +58,24 @@ public final class MockCacheRepository: CacheRepository {
     public func clearAllNewsData() {
         cachedNews.removeAll()
         print("Mock: Cleared all news data")
+    }
+    
+    public func saveSavedNews(_ news: [NewsEntity]) {
+        for item in news {
+            // Add only if not already saved
+            if !savedNews.contains(where: { $0.id == item.id }) {
+                savedNews.append(item)
+            }
+        }
+        print("Mock: Saved \(news.count) news items")
+    }
+    
+    public func getSavedNews() -> [NewsEntity] {
+        return savedNews.sorted { $0.published_date > $1.published_date }
+    }
+    
+    public func clearSavedNews() {
+        savedNews.removeAll()
+        print("Mock: Cleared all saved news")
     }
 }

@@ -34,6 +34,7 @@ struct SavedNewsListFeature {
     
     @Injected(\.repository) private var repository
     @Injected(\.saveNewsUseCase) private var saveNewsUseCase
+    @Injected(\.cache) private var cache
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -54,7 +55,7 @@ struct SavedNewsListFeature {
             case .fetchSavedNews:
                 
                 if state.news.isEmpty {
-                    state.news = saveNewsUseCase.fetch()
+                    state.news = cache.getSavedNews()
                 }
                 
                 guard state.loading == false, state.has_more else { return .none }
@@ -70,6 +71,8 @@ struct SavedNewsListFeature {
                 
                 if state.isFirstFetching {
                     state.news = response.items
+                    cache.clearAllNewsData()
+                    cache.saveSavedNews(response.items)
                 } else {
                     state.news.append(contentsOf: response.items)
                 }

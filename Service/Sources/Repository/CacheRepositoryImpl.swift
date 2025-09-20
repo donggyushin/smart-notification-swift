@@ -24,5 +24,14 @@ public final class CacheRepositoryImpl: CacheRepository {
         swiftDataService.clearAllNewsData()
     }
     
+    public func saveSavedNews(_ news: [NewsEntity]) {
+        swiftDataService.saveSavedNews(news)
+    }
+    public func getSavedNews() -> [NewsEntity] {
+        swiftDataService.getSavedNews()
+    }
+    public func clearSavedNews() {
+        swiftDataService.clearSavedNews()
+    }
     public init() { }
 }
