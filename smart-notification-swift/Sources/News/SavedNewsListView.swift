@@ -48,3 +48,9 @@ struct SavedNewsListView: View {
         }
     }
 }
+
+#Preview {
+    SavedNewsListView(store: .init(initialState: SavedNewsListFeature.State(), reducer: {
+        SavedNewsListFeature()
+    }))
+}

@@ -7,10 +7,12 @@
 
 import SwiftUI
 import Domain
+import ComposableArchitecture
 
 struct NewsDetailView: View {
     
     @StateObject var model: NewsDetailViewModel
+    let store: StoreOf<AppFeature>
     
     var body: some View {
         NavigationView {
@@ -122,5 +124,7 @@ struct NewsDetailView: View {
 }
 
 #Preview {
-    NewsDetailView(model: .init(newsId: 1))
+    NewsDetailView(model: .init(newsId: 1), store: .init(initialState: AppFeature.State(), reducer: {
+        AppFeature()
+    }))
 }

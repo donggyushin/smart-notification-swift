@@ -16,7 +16,7 @@ public struct ContentView: View {
                 .navigationDestination(for: NavigationPath.self) { path in
                     switch path {
                     case .news(let id):
-                        NewsDetailView(model: .init(newsId: id))
+                        NewsDetailView(model: .init(newsId: id), store: store)
                     }
                 }
         }
