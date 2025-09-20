@@ -1,5 +1,5 @@
 {
-  "originHash" : "a861fedd9538917cdcd1878b061ca1a4d61d65f779fb1d4b6f181951c84b674b",
+  "originHash" : "c2abb3a65ddd5623be96b88b8233719660fd2ceadf3ff5b5ff919e3b2196d73b",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/donggyushin/container",
       "state" : {
-        "revision" : "1f2d639659bfe6741d07d87fd53f7d27ac9323b1",
-        "version" : "1.3.1"
+        "revision" : "6db090f934ca231c4010dce1c9e5c040f3e6fab2",
+        "version" : "1.3.2"
       }
     },
     {
