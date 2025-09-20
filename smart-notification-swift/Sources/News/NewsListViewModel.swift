@@ -15,6 +15,7 @@ final class NewsListViewModel: ObservableObject {
     
     @Injected(\.repository) var repository
     @Injected(\.cache) var cache
+    @Injected(\.saveFeedUseCase) var saveFeedUseCase
     
     @Published var news: [NewsEntity] = []
     @Published var loading = false
@@ -24,6 +25,13 @@ final class NewsListViewModel: ObservableObject {
     @MainActor
     func prepareInitialData() {
         self.news = cache.getNews()
+    }
+    
+    @MainActor
+    func saveNews(_ news: NewsEntity) async throws {
+        let news = try await saveFeedUseCase.execute(news: news)
+        guard let index = self.news.firstIndex(where: { $0.id == news.id }) else { return }
+        self.news[index] = news
     }
     
     @MainActor

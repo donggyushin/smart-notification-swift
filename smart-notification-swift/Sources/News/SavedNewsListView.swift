@@ -14,17 +14,21 @@ struct SavedNewsListView: View {
     var body: some View {
         List {
             ForEach(model.news, id: \.id) { newsItem in
-                NewsItemRow(newsItem: newsItem)
-                    .onTapGesture {
-                        coordinator?.push(.news(newsItem.id))
+                NewsItemRow(newsItem: newsItem) { _ in
+                    Task {
+                        try await model.saveNews(newsItem)
                     }
-                    .onAppear {
-                        if newsItem.id == model.news.last?.id {
-                            Task {
-                                try? await model.fetchSavedNews()
-                            }
+                }
+                .onTapGesture {
+                    coordinator?.push(.news(newsItem.id))
+                }
+                .onAppear {
+                    if newsItem.id == model.news.last?.id {
+                        Task {
+                            try? await model.fetchSavedNews()
                         }
                     }
+                }
             }
             
             if model.loading {

@@ -15,17 +15,21 @@ struct NewsListView: View {
     var body: some View {
         List {
             ForEach(model.news, id: \.id) { newsItem in
-                NewsItemRow(newsItem: newsItem)
-                    .onTapGesture {
-                        coordinator?.push(.news(newsItem.id))
+                NewsItemRow(newsItem: newsItem) { _ in
+                    Task {
+                        try await model.saveNews(newsItem)
                     }
-                    .onAppear {
-                        if newsItem.id == model.news.last?.id {
-                            Task {
-                                try? await model.fetchNews()
-                            }
+                }
+                .onTapGesture {
+                    coordinator?.push(.news(newsItem.id))
+                }
+                .onAppear {
+                    if newsItem.id == model.news.last?.id {
+                        Task {
+                            try? await model.fetchNews()
                         }
                     }
+                }
             }
             
             if model.loading {
@@ -56,6 +60,7 @@ struct NewsListView: View {
 
 struct NewsItemRow: View {
     let newsItem: NewsEntity
+    let onSave: (Int) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -64,6 +69,14 @@ struct NewsItemRow: View {
                     .font(.headline)
                     .multilineTextAlignment(.leading)
                 Spacer()
+                Button(action: {
+                    onSave(newsItem.id)
+                }) {
+                    Image(systemName: newsItem.save ? "bookmark.fill" : "bookmark")
+                        .foregroundColor(newsItem.save ? .yellow : .gray)
+                        .font(.title3)
+                }
+                .buttonStyle(PlainButtonStyle())
                 ScoreView(score: newsItem.score)
             }
             
