@@ -2,8 +2,7 @@
 
 A personal iOS application for receiving intelligent stock market news notifications with AI-powered impact analysis.
 
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/800d89cc-63a9-4ad0-9143-55cf09d82691" />
-
+<img width="1776" height="960" alt="image" src="https://github.com/user-attachments/assets/1ff9a031-012b-4807-a4e0-bf18caceedb5" />
 
 ## Why I Built This
 
