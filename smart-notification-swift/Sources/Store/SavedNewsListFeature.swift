@@ -18,6 +18,7 @@ struct SavedNewsListFeature {
         var loading = false
         var next_cursor_id: Int?
         var has_more: Bool = true
+        var isFirstFetching = true
     }
     
     enum Action {
@@ -61,7 +62,15 @@ struct SavedNewsListFeature {
                 state.loading = false
                 state.next_cursor_id = response.next_cursor_id
                 state.has_more = response.has_more
-                state.news.append(contentsOf: response.items)
+                
+                if state.isFirstFetching {
+                    state.news = response.items
+                } else {
+                    state.news.append(contentsOf: response.items)
+                }
+                
+                state.isFirstFetching = false
+                
                 return .none
                 
             case .saveNews(let news):
