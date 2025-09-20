@@ -84,7 +84,7 @@ struct NewsDetailView: View {
                     Spacer(minLength: 20)
                 }
                 .padding()
-            } else {
+            } else if model.loading == false {
                 VStack {
                     Spacer()
                     Image(systemName: "exclamationmark.triangle")
