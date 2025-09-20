@@ -40,4 +40,11 @@ extension Container {
         }
         .shared
     }
+    
+    var saveNewsLocalUseCase: Factory<SaveNewsLocalUseCase> {
+        self {
+            SaveNewsLocalUseCase(cache: self.cache())
+        }
+        .shared
+    }
 }

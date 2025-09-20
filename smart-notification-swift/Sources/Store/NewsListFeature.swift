@@ -34,8 +34,9 @@ struct NewsListFeature {
     }
     
     @Injected(\.repository) private var repository
-    @Injected(\.cache) var cache
-    @Injected(\.saveNewsUseCase) var saveNewsUseCase
+    @Injected(\.saveNewsUseCase) private var saveNewsUseCase
+    @Injected(\.saveNewsLocalUseCase) private var saveNewsLocalUseCase
+    @Injected(\.cache) private var cache
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -57,8 +58,7 @@ struct NewsListFeature {
                 state.has_more = response.has_more
                 if state.isFirstFetching {
                     state.news = response.items
-                    cache.clearAllNewsData()
-                    cache.saveNews(response.items)
+                    saveNewsLocalUseCase.execute(response.items, onlySavedNews: false)
                 } else {
                     state.news.append(contentsOf: response.items)
                 }
@@ -76,8 +76,7 @@ struct NewsListFeature {
                 state.next_cursor_id = response.next_cursor_id
                 state.has_more = response.has_more
                 state.news = response.items
-                cache.clearAllNewsData()
-                cache.saveNews(response.items)
+                saveNewsLocalUseCase.execute(response.items, onlySavedNews: false)
                 return .none
                 
             case .saveNews(let news):
