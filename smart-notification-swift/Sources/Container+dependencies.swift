@@ -9,6 +9,7 @@ import Domain
 import Service
 import Container
 
+// Register repositories
 extension Container {
     var repository: Factory<Repository> {
         self {
@@ -26,6 +27,16 @@ extension Container {
         }
         .onPreview {
             MockCacheRepository()
+        }
+        .shared
+    }
+}
+
+// Register UseCases
+extension Container {
+    var saveFeedUseCase: Factory<SaveFeedUseCase> {
+        self {
+            SaveFeedUseCase(repository: self.repository())
         }
         .shared
     }
