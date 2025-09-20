@@ -9,7 +9,7 @@ import Foundation
 import Domain
 import SwiftData
 
-public final class SwiftDataService: CacheRepository {
+public final class SwiftDataService {
 
     private let modelContext: ModelContext
 

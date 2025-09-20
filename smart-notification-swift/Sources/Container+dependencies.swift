@@ -22,7 +22,7 @@ extension Container {
     
     var cache: Factory<CacheRepository> {
         self {
-            SwiftDataService()
+            CacheRepositoryImpl()
         }
         .onPreview {
             MockCacheRepository()
