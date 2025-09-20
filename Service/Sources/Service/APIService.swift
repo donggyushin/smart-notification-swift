@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-public final class APIService: Repository {
+public final class APIService {
     
     private let apiClient = APIClient(baseURL: "https://smart-notification-fastapi-production.up.railway.app")
     

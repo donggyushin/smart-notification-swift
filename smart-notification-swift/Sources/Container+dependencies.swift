@@ -12,7 +12,7 @@ import Container
 extension Container {
     var repository: Factory<Repository> {
         self {
-            APIService()
+            RepositoryImpl()
         }
         .onPreview {
             MockRepository()
