@@ -44,7 +44,6 @@ struct NewsListView: View {
         }
         .task {
             if store.news.isEmpty {
-                store.send(.prepareInitialData)
                 store.send(.fetchNews)
             }
         }

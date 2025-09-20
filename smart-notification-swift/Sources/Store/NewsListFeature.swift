@@ -28,8 +28,6 @@ struct NewsListFeature {
         case reload
         case reloadResponse(NewsResponse)
         
-        case prepareInitialData
-        
         case saveNews(NewsEntity)
         case saveNewsResponse(NewsEntity)
     }
@@ -42,6 +40,11 @@ struct NewsListFeature {
         Reduce { state, action in
             switch action {
             case .fetchNews:
+                
+                if state.news.isEmpty {
+                    state.news = cache.getNews()
+                }
+                
                 guard state.loading == false, state.has_more else { return .none }
                 state.loading = true
                 return .run { [cursorId = state.next_cursor_id] send in
@@ -74,10 +77,6 @@ struct NewsListFeature {
                 state.news = response.items
                 cache.clearAllNewsData()
                 cache.saveNews(response.items)
-                return .none
-                
-            case .prepareInitialData:
-                state.news = cache.getNews()
                 return .none
                 
             case .saveNews(let news):
