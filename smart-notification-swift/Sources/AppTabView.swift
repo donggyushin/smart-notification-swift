@@ -6,16 +6,19 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct AppTabView: View {
     var body: some View {
         TabView {
-            NewsListView(model: .init())
-                .tabItem {
-                    Image(systemName: "newspaper")
-                    Text("News")
-                }
-
+            NewsListView(store: .init(initialState: NewsListFeature.State()) {
+                NewsListFeature()
+            })
+            .tabItem {
+                Image(systemName: "newspaper")
+                Text("News")
+            }
+            
             SavedNewsListView(model: .init())
                 .tabItem {
                     Image(systemName: "bookmark.fill")

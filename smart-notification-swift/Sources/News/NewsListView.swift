@@ -7,52 +7,50 @@
 
 import SwiftUI
 import Domain
+import ComposableArchitecture
 
 struct NewsListView: View {
-    
-    @StateObject var model: NewsListViewModel
+    let store: StoreOf<NewsListFeature>
     
     var body: some View {
-        List {
-            ForEach(model.news, id: \.id) { newsItem in
-                NewsItemRow(newsItem: newsItem) { _ in
-                    Task {
-                        try await model.saveNews(newsItem)
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            List {
+                ForEach(store.news, id: \.id) { newsItem in
+                    NewsItemRow(newsItem: newsItem) { _ in
+                        viewStore.send(.saveNews(newsItem))
                     }
-                }
-                .onTapGesture {
-                    coordinator?.push(.news(newsItem.id))
-                }
-                .onAppear {
-                    if newsItem.id == model.news.last?.id {
-                        Task {
-                            try? await model.fetchNews()
+                    .onTapGesture {
+                        coordinator?.push(.news(newsItem.id))
+                    }
+                    .onAppear {
+                        if newsItem.id == store.news.last?.id {
+                            viewStore.send(.fetchNews)
                         }
                     }
                 }
-            }
-            
-            if model.loading {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                        .scaleEffect(1.2)
-                    Spacer()
+                
+                if viewStore.loading {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .scaleEffect(1.2)
+                        Spacer()
+                    }
+                    .padding()
                 }
-                .padding()
             }
-        }
-        .scrollIndicators(.never)
-        .navigationTitle("Market News")
-        .refreshable {
-            try? await model.reload()
-            model.saveCache()
-        }
-        .task {
-            if model.news.isEmpty {
-                model.prepareInitialData()
-                try? await model.fetchNews()
-                model.saveCache()
+            .scrollIndicators(.never)
+            .navigationTitle("Market News")
+            .refreshable {
+                viewStore.send(.reload)
+                viewStore.send(.saveCache)
+            }
+            .task {
+                if viewStore.news.isEmpty {
+                    viewStore.send(.prepareInitialData)
+                    viewStore.send(.fetchNews)
+                    viewStore.send(.saveCache)
+                }
             }
         }
     }
@@ -112,9 +110,4 @@ struct NewsItemRow: View {
         }
         .padding(.vertical, 4)
     }
-}
-
-#Preview {
-    NewsListView(model: .init())
-        .preferredColorScheme(.dark)
 }
