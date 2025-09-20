@@ -28,8 +28,6 @@ struct NewsListFeature {
         case reload
         case reloadResponse(NewsResponse)
         
-        case saveCache
-        
         case prepareInitialData
         
         case saveNews(NewsEntity)
@@ -55,6 +53,8 @@ struct NewsListFeature {
                 state.has_more = response.has_more
                 if state.isFirstFetching {
                     state.news = response.items
+                    cache.clearAllNewsData()
+                    cache.saveNews(response.items)
                 } else {
                     state.news.append(contentsOf: response.items)
                 }
@@ -72,11 +72,6 @@ struct NewsListFeature {
                 state.next_cursor_id = response.next_cursor_id
                 state.has_more = response.has_more
                 state.news = response.items
-                return .none
-                
-            case .saveCache:
-                cache.clearAllNewsData()
-                cache.saveNews(state.news)
                 return .none
                 
             case .prepareInitialData:
