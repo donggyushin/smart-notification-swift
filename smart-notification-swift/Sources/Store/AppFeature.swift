@@ -52,7 +52,7 @@ struct AppFeature {
                 if let index = state.savedNewsList.news.firstIndex(where: { $0.id == news.id }) {
                     state.savedNewsList.news[index] = news
                 } else if news.save {
-                    state.savedNewsList.news.append(news)
+                    state.savedNewsList.news.insert(news, at: 0)
                 }
                 
                 return .none
