@@ -119,7 +119,7 @@ final class NewsListViewModel: ObservableObject {
 
 - **iOS**: SwiftUI, Combine, async/await
 - **Architecture**: MVVM with Repository pattern + **TCA for shared state management**
-- **State Management**: The Composable Architecture (TCA) for complex flows, ViewModels for simple screens
+- **State Management**: The Composable Architecture (TCA) for shared state management, ViewModels for single view state management
 - **DI**: Custom property wrapper system
 - **Networking**: Alamofire
 - **Local Storage**: SwiftData for caching
