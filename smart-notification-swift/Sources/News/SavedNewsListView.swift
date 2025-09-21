@@ -29,7 +29,7 @@ struct SavedNewsListView: View {
                 }
             }
             
-            if store.loading {
+            if store.loading && store.news.isEmpty {
                 HStack {
                     Spacer()
                     ProgressView()
