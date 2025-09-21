@@ -99,7 +99,7 @@ struct NewsListFeature {
                 return .none
             case .saveNewsFailure(let news):
                 if let index = state.news.firstIndex(where: { $0.id == news.id }) {
-                    state.news[index].save.toggle()
+                    state.news[index] = news
                 }
                 return .none
             }
