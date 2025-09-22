@@ -52,6 +52,7 @@ struct SavedNewsListFeature {
                 state.next_cursor_id = response.next_cursor_id
                 state.has_more = response.has_more
                 state.news = response.items
+                saveNewsLocalUseCase.execute(state.news, onlySavedNews: true)
                 return .none
                 
             case .fetchSavedNews:
