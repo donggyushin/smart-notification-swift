@@ -45,7 +45,7 @@ struct SavedNewsListFeature {
                 guard state.loading == false else { return .none }
                 state.loading = true
                 return .run { send in
-                    await send(.reloadResponse(try await repository.getNewsFeed(cursor_id: nil)))
+                    await send(.reloadResponse(try await repository.getSavedNewsFeed(cursor_id: nil)))
                 }
             case .reloadResponse(let response):
                 state.loading = false
@@ -99,6 +99,7 @@ struct SavedNewsListFeature {
             case .saveNewsResponse(let news):
                 guard let index = state.news.firstIndex(where: { $0.id == news.id }) else { return .none }
                 state.news[index] = news
+                saveNewsLocalUseCase.execute(state.news, onlySavedNews: true)
                 return .none
             case .saveNewsFailure(let news):
                 if let index = state.news.firstIndex(where: { $0.id == news.id }) {

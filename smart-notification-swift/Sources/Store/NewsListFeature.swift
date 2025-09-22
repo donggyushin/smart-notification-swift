@@ -96,6 +96,7 @@ struct NewsListFeature {
             case .saveNewsResponse(let news):
                 guard let index = state.news.firstIndex(where: { $0.id == news.id }) else { return .none }
                 state.news[index] = news
+                saveNewsLocalUseCase.execute(state.news, onlySavedNews: false)
                 return .none
             case .saveNewsFailure(let news):
                 if let index = state.news.firstIndex(where: { $0.id == news.id }) {
