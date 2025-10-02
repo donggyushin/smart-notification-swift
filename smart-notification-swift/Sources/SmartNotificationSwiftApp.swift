@@ -67,9 +67,11 @@ extension AppDelegate: MessagingDelegate {
     }
 }
 
+var navigationManagerRef: NavigationManager?
+
 @main
 struct SmartNotificationSwiftApp: App {
-    
+    @StateObject var navigationManager = NavigationManager()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
@@ -77,6 +79,10 @@ struct SmartNotificationSwiftApp: App {
             ContentView()
                 .onOpenURL { url in
                     openDeepLink(url: url)
+                }
+                .environmentObject(navigationManager)
+                .onAppear {
+                    navigationManagerRef = navigationManager
                 }
         }
     }

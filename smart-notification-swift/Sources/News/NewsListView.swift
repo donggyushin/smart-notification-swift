@@ -11,6 +11,7 @@ import ComposableArchitecture
 
 struct NewsListView: View {
     let store: StoreOf<NewsListFeature>
+    @EnvironmentObject var navigationManager: NavigationManager
     
     var body: some View {
         List {
@@ -19,7 +20,7 @@ struct NewsListView: View {
                     store.send(.saveNews(newsItem))
                 }
                 .onTapGesture {
-                    coordinator?.push(.news(newsItem.id))
+                    navigationManager.push(.news(newsItem.id))
                 }
                 .onAppear {
                     if newsItem.id == store.news.last?.id {

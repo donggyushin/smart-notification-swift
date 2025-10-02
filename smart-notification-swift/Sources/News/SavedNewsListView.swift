@@ -12,6 +12,7 @@ import Domain
 struct SavedNewsListView: View {
     
     let store: StoreOf<SavedNewsListFeature>
+    @EnvironmentObject var navigationManager: NavigationManager
     
     var body: some View {
         List {
@@ -20,7 +21,7 @@ struct SavedNewsListView: View {
                     store.send(.saveNews(newsItem))
                 }
                 .onTapGesture {
-                    coordinator?.push(.news(newsItem.id))
+                    navigationManager.push(.news(newsItem.id))
                 }
                 .onAppear {
                     if newsItem.id == store.news.last?.id {

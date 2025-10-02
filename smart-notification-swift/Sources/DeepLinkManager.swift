@@ -20,7 +20,7 @@ func openDeepLink(url: URL) {
     case "news":
         if pathComponents.count == 1 {
             if let newsId = Int(pathComponents[0]) {
-                coordinator?.push(.news(newsId))
+                navigationManagerRef?.push(.news(newsId))
             }
         }
         

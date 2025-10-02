@@ -3,7 +3,8 @@ import ComposableArchitecture
 
 public struct ContentView: View {
     
-    @State private var path: [NavigationPath] = []
+    @EnvironmentObject var navigationManager: NavigationManager
+    
     let store = Store(initialState: AppFeature.State()) {
         AppFeature()
     }
@@ -11,7 +12,7 @@ public struct ContentView: View {
     public init() {}
 
     public var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack(path: $navigationManager.path) {
             AppTabView(store: store)
                 .navigationDestination(for: NavigationPath.self) { path in
                     switch path {
@@ -19,9 +20,6 @@ public struct ContentView: View {
                         NewsDetailView(model: .init(newsId: id), store: store)
                     }
                 }
-        }
-        .onAppear {
-            coordinator = .init(path: $path)
         }
     }
 }
